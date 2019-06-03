@@ -27,14 +27,12 @@ const upload2 = multer({ storage: storage2 });
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  console.log("test");
   User.find({}).then(function (users) {
     res.send(users);
   });
 });
 
 router.put('/update', function (req, res) { // change /name to /update
-  db.useDb('users');
   User.findOne({ "_id": req.body.id }, (err, doc) => {
     if (err) {
       console.log("error: " + err)
@@ -117,7 +115,6 @@ router.put('/profilePic', function (req, res) {
 });
 
 router.put('/data/users/logout', function (req, res) {
-  db.useDb('users');
   console.log("id: " + req.body.id)
   console.log("onclock: " + req.body.value);
   User.findOneAndUpdate({ "_id": req.body.id }, { "seshId": req.body.value }, (err) => {
@@ -166,7 +163,6 @@ router.post('/id', function (req, res) {
 });
 
 router.post('/signup', (req, res) => {
-  db.useDb('users');
   User.find({ "email": req.body.email }, (err, res2) => {
     if (err) {
       console.log("Signup Error\n" + err);
@@ -193,7 +189,7 @@ router.post('/signup', (req, res) => {
             pass: process.env.GMAIL_PASSWORD
           }
         });
-        var url = 'http://' + '134.209.62.80' + ':3210/data/users/signup/verification/' + user["_id"];
+        var url = 'http://' + '10.1.10.245' + ':3210/data/users/signup/verification/' + user["_id"];
         var mailOptions = {
           from: process.env.GMAIL_USERNAME,
           to: req.body.email,
@@ -266,8 +262,6 @@ router.get('/signup/verification/:id', (req, res) => {
 })
 
 router.post('/login', (req, res) => {
-  db.useDb('users');
-  console.log("test");
   var pass = encryptPass(req.body.password)
   User.findOne({ "email": req.body.email, "password": pass }).exec((err, res2) => {
     if (err) {

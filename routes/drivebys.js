@@ -117,7 +117,7 @@ router.post('/NewDB', async (req, res) => {
   let street = req.body.address.substring(0, req.body.address.indexOf(","))
   console.log("test::")
   console.log("city", req.body.city)
-  User.findOne({ "__id": req.body.id })
+  User.findOne({ "_id": req.body.id })
     .then((user) => {
       AppendDB([
         "", //initials
