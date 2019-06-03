@@ -7,15 +7,7 @@ var logger = require('morgan');
 
 var bodyParser = require('body-parser');
 var cors = require('cors');
-var mkdirp = require('mkdirp');
-const fs = require('fs');
-const nodemailer = require('nodemailer');
-const multer = require('multer');
 var mongoose = require('mongoose');
-
-//External Setups (AWS / Google Sheets)
-const uploadFile = require('./aws').uploadFile;
-const AppendDB = require('./sheets');
 
 //Initialize App
 var app = express();
@@ -24,55 +16,20 @@ var app = express();
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var drivebyRouter = require('./routes/drivebys');
+var timesRouter = require('./routes/times');
 
 //Storage
 app.use('/file', express.static(path.join(__dirname + '/file')))
 
-const storage2 = multer.diskStorage({
-  destination: function (req, file, cb) {
-    var path = './file/uploads/profilePics/'
-    mkdirp(path, function (err) {
-      cb(null, path);
-    });
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname)
-  }
-})
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const date = new Date()
-    var path = './file/uploads/' + date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + (date.getDate()) + '/';
-    console.log("path of new Image: ", path);
-    mkdirp(path, function (err) {
-      cb(null, path);
-    });
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname)
-  }
-})
-
-const upload = multer({ storage: storage });
-const upload2 = multer({ storage: storage2 });
 
 //Mongo Setup
-const ip = '10.1.10.245';
 const mongoip = '127.0.0.1';
 
 var url = 'mongodb://' + mongoip + ':2771/VaroDB';
 //var url = 'mongodb://varodb:varopass@' + mongoip + ':2771/VaroDB';
-const User = require('./Schemas/UserModel');
-const TimeClock = require('./Schemas/TimeClock');
-const DB = require('./Schemas/DBModel');
 
 mongoose.connect(url, { useNewUrlParser: true });
 mongoose.Promise = global.Promise;
-var db = mongoose.createConnection(ip + '/data/');
-
-
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -87,8 +44,9 @@ app.use(bodyParser.json({ limit: '10mb', extended: true }));
 app.use(cors());
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/drivebys', drivebyRouter)
+app.use('/data/users', usersRouter);
+app.use('/data/drivebys', drivebyRouter);
+app.use('/data/times', timesRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
