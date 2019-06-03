@@ -12,7 +12,6 @@ const fs = require('fs');
 const nodemailer = require('nodemailer');
 const multer = require('multer');
 var mongoose = require('mongoose');
-var crypto = require('crypto');
 
 //External Setups (AWS / Google Sheets)
 const uploadFile = require('./aws').uploadFile;
@@ -59,10 +58,11 @@ const upload = multer({ storage: storage });
 const upload2 = multer({ storage: storage2 });
 
 //Mongo Setup
-const ip = '134.209.62.80';
+const ip = '10.1.10.245';
 const mongoip = '127.0.0.1';
 
-var url = 'mongodb://varodb:varopass@' + mongoip + ':2771/VaroDB';
+var url = 'mongodb://' + mongoip + ':2771/VaroDB';
+//var url = 'mongodb://varodb:varopass@' + mongoip + ':2771/VaroDB';
 const User = require('./Schemas/UserModel');
 const TimeClock = require('./Schemas/TimeClock');
 const DB = require('./Schemas/DBModel');
@@ -72,17 +72,7 @@ mongoose.Promise = global.Promise;
 var db = mongoose.createConnection(ip + '/data/');
 
 
-//Crypto
-var generate_key = function () {
-  var sha = crypto.createHash('sha256');
-  sha.update(Math.random().toString());
-  return sha.digest('hex');
-};
-var encryptPass = (pass) => {
-  var sha = crypto.createHash('sha256');
-  sha.update(pass);
-  return sha.digest('hex');
-}
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
