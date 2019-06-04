@@ -69,7 +69,7 @@ function getNewToken(oAuth2Client, callback) {
 }
 function appendRow(auth, data) {
   const sheets = google.sheets({ version: 'v4', auth });
-  console.log("data", data);
+  //console.log("data", data);
   var request = {
     // The ID of the spreadsheet to update.
     spreadsheetId: '1tXGvEaXKGvkJoLCM4GNs5uuO1seupeBarC13UZRqH5s', //"1IeIOmvfcHc6tTFwjOEs4qT4Q0yJIwfVsnkLSmC0LuKc"

@@ -115,8 +115,6 @@ router.post('/NewDB', async (req, res) => {
     default:
       break;
   }
-  console.log("t: " + type);
-  console.log("path: " + req.body.path);
   let date = new Date(req.body.date);
   let street = req.body.address.substring(0, req.body.address.indexOf(","))
   var path = req.body.path.replace(/\\/g, "/");
