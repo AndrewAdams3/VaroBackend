@@ -32,7 +32,7 @@ router.get('/', function(req, res, next) {
   });
 });
 
-router.put('/update', function (req, res) { // change /name to /update
+router.put('/update', function (req, res) {
   User.findOne({ "_id": req.body.id }, (err, doc) => {
     if (err) {
       console.log("error: " + err)
@@ -114,7 +114,7 @@ router.put('/profilePic', function (req, res) {
   });
 });
 
-router.put('/data/users/logout', function (req, res) {
+router.put('/logout', function (req, res) {
   console.log("id: " + req.body.id)
   console.log("onclock: " + req.body.value);
   User.findOneAndUpdate({ "_id": req.body.id }, { "seshId": req.body.value }, (err) => {
@@ -189,7 +189,7 @@ router.post('/signup', (req, res) => {
             pass: process.env.GMAIL_PASSWORD
           }
         });
-        var url = 'http://' + '10.1.10.245' + ':3210/data/users/signup/verification/' + user["_id"];
+        var url = 'http://' + process.env.ip + ':3210/data/users/signup/verification/' + user["_id"];
         var mailOptions = {
           from: process.env.GMAIL_USERNAME,
           to: req.body.email,

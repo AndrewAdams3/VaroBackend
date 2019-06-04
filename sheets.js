@@ -10,7 +10,7 @@ const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 const TOKEN_PATH = 'token.json';
 
 //Accepts a list of values to be inserted as a row
-function AppendDB(data) {
+async function AppendDB(data) {
   // Load client secrets from a local file.
   fs.readFile('credentials.json', (err, content) => {
     if (err) return console.log('Error loading client secret file:', err);

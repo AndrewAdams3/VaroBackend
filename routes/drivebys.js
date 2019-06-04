@@ -1,10 +1,13 @@
 var express = require('express');
 var router = express.Router();
 const multer = require('multer');
+const Path = require('path');
 
 const fs = require('fs');
+const mkdirp = require('mkdirp');
 
 const DB = require('../Schemas/DBModel');
+const User = require('../Schemas/UserModel');
 
 //External Setups (AWS / Google Sheets)
 const uploadFile = require('../aws').uploadFile;
@@ -14,7 +17,7 @@ const AppendDB = require('../sheets');
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const date = new Date()
-    var path = './file/uploads/' + date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + (date.getDate()) + '/';
+    var path = Path.join('./file/uploads/', date.getFullYear().toString(), (date.getMonth() + 1).toString(), date.getDate().toString());
     console.log("path of new Image: ", path);
     mkdirp(path, function (err) {
       cb(null, path);
@@ -115,13 +118,12 @@ router.post('/NewDB', async (req, res) => {
   console.log("path: " + req.body.path);
   let date = new Date(req.body.date);
   let street = req.body.address.substring(0, req.body.address.indexOf(","))
-  console.log("test::")
-  console.log("city", req.body.city)
-  User.findOne({ "_id": req.body.id })
-    .then((user) => {
-      AppendDB([
+  let path = req.body.path.split('\\').join('/');  
+  User.findOne({ "__id": req.body.id })
+    .then( async (user) => {
+      await AppendDB([
         "", //initials
-        "https://s3-us-west-1.amazonaws.com/varodrive/" + req.body.path, //pic
+        "https://s3-us-west-1.amazonaws.com/varodrive/" + path, //pic
         date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear(), //date
         street, //street
         req.body.city, //city
