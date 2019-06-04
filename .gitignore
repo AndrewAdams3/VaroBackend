@@ -60,3 +60,6 @@ app.env
 
 # next.js build output
 .next
+
+#pictures
+file/
