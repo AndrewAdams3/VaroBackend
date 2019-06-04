@@ -32,8 +32,11 @@ getFile = async (bucket, path) => {
 
 uploadFile = (bucket, path) => {
   fs.readFile(path, (err, data) => {
-    path = path.replace(/\\/g, "/");
-    console.log("aws location: ", path, Path.extname(path));
+    console.log("path before", path);
+    Path.normalize(path);
+    console.log("after norm: ", path);
+    //path = path.replace(/\\/g, "/");
+    //console.log("aws location: ", path, Path.extname(path));
     if (err) throw err;
     const params = {
       Bucket: bucket, // pass your bucket name
