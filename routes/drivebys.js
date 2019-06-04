@@ -39,6 +39,7 @@ router.post('/byUserId', async (req, res) => {
       })
     }
     else {
+      //console.log(docs);
       res.send({
         response: 0,
         docs: docs
@@ -58,9 +59,6 @@ router.get('/all', async (req, res) => {
       })
     }
     else {
-      for (var i in docs) {
-        console.log(docs["picturePath"]);
-      }
       res.send({
         response: 0,
         docs: docs
@@ -121,7 +119,8 @@ router.post('/NewDB', async (req, res) => {
   console.log("path: " + req.body.path);
   let date = new Date(req.body.date);
   let street = req.body.address.substring(0, req.body.address.indexOf(","))
-  let path = req.body.path.split('\\').join('/');  
+  //let path = req.body.path.split('\\').join('/');  
+  var path = req.body.path.replace(/\\/g, "/");
   User.findOne({ "__id": req.body.id })
     .then( async (user) => {
       await AppendDB([
@@ -140,7 +139,7 @@ router.post('/NewDB', async (req, res) => {
   await DB.create(
     {
       address: req.body.address,
-      picturePath: req.body.path,
+      picturePath: path, // req.body.path,
       date: req.body.date,
       type: type,
       vacant: req.body.vacant,
