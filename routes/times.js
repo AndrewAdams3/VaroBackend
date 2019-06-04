@@ -24,12 +24,21 @@ router.post('/byId', (req, res) => {
             return time;
           }
         })
-        ts = ts.sort( (a, b) => {a.startTime > b.startTime ? 1 : -1});
+        ts.sort( (a, b) => {
+          let at = new Date(a.startTime).getTime(), bt = new Date(b.startTime).getTime()
+          //console.log("at, bt", at, bt);
+          return bt - at;
+        });
         res.send({
           times: ts
         })
         return;
       }
+      times.sort((a, b) => {
+        let at = new Date(a.startTime).getTime(), bt = new Date(b.startTime).getTime()
+        //console.log("at, bt", at, bt);
+        return bt - at;
+      });
       res.send({
         times: times
       })
