@@ -58,6 +58,9 @@ router.get('/all', async (req, res) => {
       })
     }
     else {
+      for (var i in docs) {
+        console.log(docs["picturePath"]);
+      }
       res.send({
         response: 0,
         docs: docs
