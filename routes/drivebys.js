@@ -17,7 +17,7 @@ const AppendDB = require('../sheets');
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const date = new Date()
-    var path = Path.join('./file/uploads/', date.getFullYear().toString(), (date.getMonth() + 1).toString(), date.getDate().toString());
+    var path = Path.join('file/uploads/', date.getFullYear().toString(), (date.getMonth() + 1).toString(), date.getDate().toString());
     console.log("path of new Image: ", path);
     mkdirp(path, function (err) {
       cb(null, path);

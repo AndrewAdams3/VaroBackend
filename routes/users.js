@@ -12,7 +12,7 @@ const encryptPass = require('../helpers/crypt').encryptPass;
 //Storage
 const storage2 = multer.diskStorage({
   destination: function (req, file, cb) {
-    var path = '../files/uploads/profilePics/'
+    var path = 'file/uploads/profilePics/'
     mkdirp(path, function (err) {
       cb(null, path);
     });
