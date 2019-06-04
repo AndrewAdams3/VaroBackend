@@ -24,6 +24,7 @@ router.post('/byId', (req, res) => {
             return time;
           }
         })
+        ts = ts.sort( (a, b) => {a.startTime > b.startTime ? 1 : -1});
         res.send({
           times: ts
         })
