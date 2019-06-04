@@ -18,6 +18,7 @@ const storage2 = multer.diskStorage({
     });
   },
   filename: function (req, file, cb) {
+    console.log("fileName in Storage: ", file.originalname);
     cb(null, file.originalname)
   }
 })
@@ -135,10 +136,11 @@ router.put('/logout', function (req, res) {
 router.post('/id', function (req, res) {
   User.findOne({ "seshId": req.body.seshId }).then(function (user) {
     if (user) {
+      let picture = user["profilePic"].replace(/\\/g, "/");
       console.log("user: " + user["_id"]);
       res.send({
         userId: user["_id"],
-        pic: user["profilePic"],
+        pic: picture,
         fName: user["fName"] || "",
         lName: user["lName"] || "",
         city: user["city"] || "",
