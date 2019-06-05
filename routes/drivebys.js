@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const multer = require('multer');
 const Path = require('path');
+const slash = require('slash');
 
 const fs = require('fs');
 const mkdirp = require('mkdirp');
@@ -71,11 +72,10 @@ router.get('/all', async (req, res) => {
 router.post('/upload', upload.single('image'), async (req, res) => {
   if (req.file) {
     try {
-      uploadFile('varodrive', req.file.path)
+      uploadFile('varodrive', slash(req.file.path))
     } catch (err) {
       console.log("Uploading to AWS: ", err);
     }
-    //getBuckets();
     fs.unlink(req.file.path, (err) => {
       if (err) {
         console.error(err)
@@ -84,7 +84,7 @@ router.post('/upload', upload.single('image'), async (req, res) => {
     })
     res.send({
       response: 0,
-      path: req.file.path
+      path: slash(req.file.path)
     })
   }
   else {
@@ -117,10 +117,11 @@ router.post('/NewDB', async (req, res) => {
   }
   let date = new Date(req.body.date);
   let street = req.body.address.substring(0, req.body.address.indexOf(","))
-  var path = req.body.path;
-  path = "https://s3-us-west-1.amazonaws.com/varodrive/" + path;
-  path = path.replace(/\\/g, "/");
+  var path = Path.join("s3-us-west-1.amazonaws.com/varodrive/" + req.body.path);
   path = Path.normalize(path);
+  path = slash(path);
+  console.log("path: ", path);
+  path = "https://" + path;
   hyperPath = `=HYPERLINK(\"${path}\", IMAGE(\"${path}\", 4, 120, 150))`
   User.findOne({ "__id": req.body.id })
     .then( async (user) => {
@@ -161,8 +162,7 @@ router.post('/NewDB', async (req, res) => {
       response: -1,
       message: "Form Incomplete"
     })
-    co
-    vxgfsole.log("err:" + err);
+    console.log("err:" + err);
   }
   )
 })
