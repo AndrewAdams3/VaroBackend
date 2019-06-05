@@ -117,12 +117,16 @@ router.post('/NewDB', async (req, res) => {
   }
   let date = new Date(req.body.date);
   let street = req.body.address.substring(0, req.body.address.indexOf(","))
-  var path = req.body.path.replace(/\\/g, "/");
+  var path = req.body.path;
+  path = "https://s3-us-west-1.amazonaws.com/varodrive/" + path;
+  path = path.replace(/\\/g, "/");
+  path = Path.normalize(path);
+  hyperPath = `=HYPERLINK(\"${path}\", IMAGE(\"${path}\", 4, 120, 150))`
   User.findOne({ "__id": req.body.id })
     .then( async (user) => {
       await AppendDB([
         "", //initials
-        "https://s3-us-west-1.amazonaws.com/varodrive/" + path, //pic
+        hyperPath, //pic
         date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear(), //date
         street, //street
         req.body.city, //city
