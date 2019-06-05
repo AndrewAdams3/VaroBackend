@@ -223,7 +223,7 @@ router.post('/signup', (req, res) => {
   });
 })
 
-router.get('/data/users/signup/isVerified/:id', (req, res) => {
+router.get('/signup/isVerified/:id', (req, res) => {
   User.findOne({ "_id": req.params.id }, (err, user) => {
     if (user) {
       if (user["verified"] == true) {
