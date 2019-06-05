@@ -9,7 +9,7 @@ router.post('/newTime', (req, res) => {
     userId: req.body.id,
     startLocation: req.body.sLocation,
   })
-  console.log(req.body.sTime + "stime: " + req.body.sTime);
+  //console.log(req.body.sTime + "stime: " + req.body.sTime);
 })
 
 router.post('/byId', (req, res) => {
@@ -26,7 +26,7 @@ router.post('/byId', (req, res) => {
         })
         ts.sort( (a, b) => {
           let at = new Date(a.startTime).getTime(), bt = new Date(b.startTime).getTime()
-          //console.log("at, bt", at, bt);
+          ////console.log("at, bt", at, bt);
           return bt - at;
         });
         res.send({
@@ -36,7 +36,7 @@ router.post('/byId', (req, res) => {
       }
       times.sort((a, b) => {
         let at = new Date(a.startTime).getTime(), bt = new Date(b.startTime).getTime()
-        //console.log("at, bt", at, bt);
+        ////console.log("at, bt", at, bt);
         return bt - at;
       });
       res.send({
@@ -44,18 +44,18 @@ router.post('/byId', (req, res) => {
       })
       return;
     }
-    console.log("err: " + err);
+    //console.log("err: " + err);
   })
 })
 
 router.post('/', (req, res) => {
   TimeClock.findOne({ "userId": req.body.id, "endTime": -1 }).exec((err, res2) => {
     if (err) {
-      console.log("Error finding tc\n" + err);
+      //console.log("Error finding tc\n" + err);
       return;
     }
     if (!res2) {
-      console.log("no tc found");
+      //console.log("no tc found");
       res.send({
         found: false
       });
@@ -70,18 +70,18 @@ router.post('/', (req, res) => {
 })
 
 router.put('/endTime', (req, res) => {
-  console.log(new Date(req.body.eTime));
-  console.log("testing stime: " + req.body.sTime);
+  //console.log(new Date(req.body.eTime));
+  //console.log("testing stime: " + req.body.sTime);
   TimeClock.findOneAndUpdate({ "userId": req.body.id, "endTime": -1 }, {
     "endTime": req.body.eTime,
     "endLocation": req.body.eLocation,
     "totalTime": req.body.eTime - req.body.sTime
   }, (err) => {
     if (err) {
-      console.log("err with tc: " + err);
+      //console.log("err with tc: " + err);
       return;
     }
-    //    console.log("put success");
+    //    //console.log("put success");
   })
 })
 

@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const date = new Date()
     var path = Path.join('file/uploads/', date.getFullYear().toString(), (date.getMonth() + 1).toString(), date.getDate().toString());
-    console.log("path of new Image: ", path);
+    //console.log("path of new Image: ", path);
     mkdirp(path, function (err) {
       cb(null, path);
     });
@@ -31,16 +31,16 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router.post('/byUserId', async (req, res) => {
-  console.log("id test: " + req.body.id)
+  //console.log("id test: " + req.body.id)
   DB.find({ "finder": req.body.id }, (err, docs) => {
     if (err) {
-      console.log(err);
+      //console.log(err);
       res.send({
         response: -1
       })
     }
     else {
-      //console.log(docs);
+      ////console.log(docs);
       res.send({
         response: 0,
         docs: docs
@@ -50,10 +50,10 @@ router.post('/byUserId', async (req, res) => {
 })
 
 router.get('/all', async (req, res) => {
-  console.log("getting");
+  //console.log("getting");
   DB.find({}, (err, docs) => {
     if (err) {
-      console.log(err);
+      //console.log(err);
       res.send({
         response: -1,
         docs: []
@@ -74,7 +74,7 @@ router.post('/upload', upload.single('image'), async (req, res) => {
     try {
       uploadFile('varodrive', slash(req.file.path))
     } catch (err) {
-      console.log("Uploading to AWS: ", err);
+      //console.log("Uploading to AWS: ", err);
     }
     fs.unlink(req.file.path, (err) => {
       if (err) {
@@ -120,7 +120,7 @@ router.post('/NewDB', async (req, res) => {
   var path = Path.join("s3-us-west-1.amazonaws.com/varodrive/" + req.body.path);
   path = Path.normalize(path);
   path = slash(path);
-  console.log("path: ", path);
+  //console.log("path: ", path);
   path = "https://" + path;
   hyperPath = `=HYPERLINK(\"${path}\", IMAGE(\"${path}\", 4, 120, 150))`
   User.findOne({ "__id": req.body.id })
@@ -152,7 +152,7 @@ router.post('/NewDB', async (req, res) => {
       longitude: req.body.lon
     }
   ).then(async (res2) => {
-    console.log("Done!");
+    //console.log("Done!");
     await res.send({
       response: 0,
       message: "Submission Complete!"
@@ -162,7 +162,7 @@ router.post('/NewDB', async (req, res) => {
       response: -1,
       message: "Form Incomplete"
     })
-    console.log("err:" + err);
+    //console.log("err:" + err);
   }
   )
 })

@@ -17,14 +17,14 @@ getFile = async (bucket, path) => {
     Bucket: bucket,
     Key: path 
   }
-  console.log("pathcheck: ", path);
+  //console.log("pathcheck: ", path);
   await s3.getObject(params, (err, data)=> {
     if(err){
-      console.log("Error Getting Image: ", err.stack);
+      //console.log("Error Getting Image: ", err.stack);
       //return {};
     }
     else{
-      console.log("testing Data: ", data);
+      //console.log("testing Data: ", data);
       return data;
     }
   }).then( async (res) => {return res});
@@ -32,11 +32,11 @@ getFile = async (bucket, path) => {
 
 uploadFile = (bucket, path) => {
   fs.readFile(path, (err, data) => {
-    //console.log("path before", path);
+    ////console.log("path before", path);
     Path.normalize(path);
-    //console.log("after norm: ", path);
+    ////console.log("after norm: ", path);
     //path = path.replace(/\\/g, "/");
-    //console.log("aws location: ", path, Path.extname(path));
+    ////console.log("aws location: ", path, Path.extname(path));
     if (err) throw err;
     const params = {
       Bucket: bucket, // pass your bucket name
@@ -48,7 +48,7 @@ uploadFile = (bucket, path) => {
     };
     s3.upload(params, function (s3Err, data) {
       if (s3Err) throw s3Err
-      console.log(`File uploaded successfully at ${data.Location}`)
+      //console.log(`File uploaded successfully at ${data.Location}`)
     });
   });
 };

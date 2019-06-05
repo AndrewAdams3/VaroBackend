@@ -4,6 +4,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var compression = require('compression')
 
 var bodyParser = require('body-parser');
 var cors = require('cors');
@@ -43,6 +44,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json({ limit: '10mb', extended: true }));
 app.use(cors());
+app.use(compression());
 
 //Routes
 app.use('/', indexRouter);

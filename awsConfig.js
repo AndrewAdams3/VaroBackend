@@ -7,7 +7,7 @@ aws.config.update({
   region: 'us-west-1'
 })
 
-console.log("Config: ", process.env.AWS_ACCESS_KEY);
+//console.log("Config: ", process.env.AWS_ACCESS_KEY);
 const s3 = new aws.S3();
 
 module.exports = s3;

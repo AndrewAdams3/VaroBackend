@@ -13,7 +13,7 @@ const TOKEN_PATH = 'token.json';
 async function AppendDB(data) {
   // Load client secrets from a local file.
   fs.readFile('credentials.json', (err, content) => {
-    if (err) return console.log('Error loading client secret file:', err);
+    if (err) return //console.log('Error loading client secret file:', err);
     // Authorize a client with credentials, then call the Google Sheets API.
     authorize(JSON.parse(content), appendRow, data); // change function name
   });
@@ -48,7 +48,7 @@ function getNewToken(oAuth2Client, callback) {
     access_type: 'offline',
     scope: SCOPES,
   });
-  console.log('Authorize this app by visiting this url:', authUrl);
+  //console.log('Authorize this app by visiting this url:', authUrl);
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -61,7 +61,7 @@ function getNewToken(oAuth2Client, callback) {
       // Store the token to disk for later program executions
       fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
         if (err) return console.error(err);
-        console.log('Token stored to', TOKEN_PATH);
+        //console.log('Token stored to', TOKEN_PATH);
       });
       callback(oAuth2Client, data);
     });
@@ -69,7 +69,7 @@ function getNewToken(oAuth2Client, callback) {
 }
 function appendRow(auth, data) {
   const sheets = google.sheets({ version: 'v4', auth });
-  //console.log("data", data);
+  ////console.log("data", data);
   var request = {
     // The ID of the spreadsheet to update.
     spreadsheetId: '1IeIOmvfcHc6tTFwjOEs4qT4Q0yJIwfVsnkLSmC0LuKc', //"1IeIOmvfcHc6tTFwjOEs4qT4Q0yJIwfVsnkLSmC0LuKc" 1tXGvEaXKGvkJoLCM4GNs5uuO1seupeBarC13UZRqH5s
@@ -91,7 +91,7 @@ function appendRow(auth, data) {
       return;
     }
     // TODO: Change code below to process the `response` object:
-    //console.log(JSON.stringify(response, null, 2));
+    ////console.log(JSON.stringify(response, null, 2));
   });
 }
 
