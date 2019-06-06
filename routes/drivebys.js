@@ -117,12 +117,12 @@ router.post('/NewDB', async (req, res) => {
   }
   let date = new Date(req.body.date);
   let street = req.body.address.substring(0, req.body.address.indexOf(","))
-  var path = Path.join("s3-us-west-1.amazonaws.com/varodrive/" + req.body.path);
+  let path = Path.join("s3-us-west-1.amazonaws.com/varodrive/" + req.body.path);
   path = Path.normalize(path);
   path = slash(path);
   //console.log("path: ", path);
   path = "https://" + path;
-  hyperPath = `=HYPERLINK(\"${path}\", IMAGE(\"${path}\", 4, 120, 150))`
+  let hyperPath = `=HYPERLINK("${path}",IMAGE("${path}", 4, 120, 150))`;
   User.findOne({ "__id": req.body.id })
     .then( async (user) => {
       await AppendDB([
