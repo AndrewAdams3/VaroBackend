@@ -123,8 +123,9 @@ router.post('/NewDB', async (req, res) => {
   //console.log("path: ", path);
   path = "https://" + path;
   let hyperPath = `=HYPERLINK("${path}","View Image")`;
-  User.findOne({ "__id": req.body.id })
+  User.findOne({ "_id": req.body.id })
     .then( async (user) => {
+      console.log(`id: ${req.body.id}, user: ${user.fName}`);
       await AppendDB([
         "", //initials
         hyperPath, //pic
