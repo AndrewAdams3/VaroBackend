@@ -148,7 +148,7 @@ router.post('/NewDB', async (req, res) => {
       vacant: req.body.vacant,
       burned: req.body.burned,
       boarded: req.body.boarded,
-      finder: req.body.finder,
+      finder: req.body.id,
       latitude: req.body.lat,
       longitude: req.body.lon
     }
