@@ -77,12 +77,12 @@ router.post('/upload', upload.single('image'), async (req, res) => {
         function (callback) {
           console.log("one");
           uploadFile('varodrive', slash(req.file.path))
-          callback(1)
+          callback(null, 1)
         },
         function (callback) {
           console.log("two");
           fs.unlink(req.file.path, (err) => {if(err) console.log(err)})
-          callback(2)
+          callback(null, 2)
         }
     ], 
     function(err, res2) {
