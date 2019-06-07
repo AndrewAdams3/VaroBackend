@@ -126,8 +126,10 @@ router.post('/NewDB', async (req, res) => {
     default:
       break;
   }
-  let date = new Date(req.body.date);
-  console.log("date" + date);
+  let oldDate = new Date(req.body.date);
+  let newDate = oldDate.getTime() - oldDate.getTimezoneOffset();
+  let date = new Date(newDate);
+  console.log(`old Date: ${oldDate} and new Date: ${date}`);
   let street = req.body.address.substring(0, req.body.address.indexOf(","))
   let path = Path.join("s3-us-west-1.amazonaws.com/varodrive/" + req.body.path);
   path = Path.normalize(path);
