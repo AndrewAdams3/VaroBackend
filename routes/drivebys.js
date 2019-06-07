@@ -17,7 +17,7 @@ const AppendDB = require('../sheets');
 
 //Storage
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
+  destination: async function (req, file, cb) {
     const date = new Date()
     var path = Path.join('file/uploads/', date.getFullYear().toString(), (date.getMonth() + 1).toString(), date.getDate().toString());
     //console.log("path of new Image: ", path);
@@ -25,7 +25,7 @@ const storage = multer.diskStorage({
       cb(null, path);
     });
   },
-  filename: function (req, file, cb) {
+  filename: async function (req, file, cb) {
     cb(null, file.originalname)
   }
 })
@@ -71,21 +71,34 @@ router.get('/all', async (req, res) => {
 })
 
 router.post('/upload', upload.single('image'), async (req, res) => {
+  console.log("enter");
   if (req.file) {
-    try {
-      uploadFile('varodrive', slash(req.file.path))
-    } catch (err) {
-      //console.log("Uploading to AWS: ", err);
-    }
-    fs.unlink(req.file.path, (err) => {
+    Async.series([
+        function (callback) {
+          console.log("one");
+          uploadFile('varodrive', slash(req.file.path))
+          callback(1)
+        },
+        function (callback) {
+          console.log("two");
+          fs.unlink(req.file.path, (err) => {if(err) console.log(err)})
+          callback(2)
+        }
+    ], 
+    function(err, res2) {
+      //console.log("exiting with " + res2);
       if (err) {
-        console.error(err)
-        return
+        //console.log(err);
+        res.send({
+          response: -1
+        })
       }
-    })
-    res.send({
-      response: 0,
-      path: slash(req.file.path)
+      else{
+        res.send({
+          response: 0,
+          path: slash(req.file.path)
+        })
+      }
     })
   }
   else {

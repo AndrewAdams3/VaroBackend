@@ -32,7 +32,6 @@ getFile = async (bucket, path) => {
 
 uploadFile = (bucket, path) => {
   fs.readFile(path, (err, data) => {
-    ////console.log("path before", path);
     Path.normalize(path);
     ////console.log("after norm: ", path);
     //path = path.replace(/\\/g, "/");
