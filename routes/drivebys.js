@@ -138,7 +138,7 @@ router.post('/NewDB', async (req, res) => {
     () =>
       User.findOne({ "_id": req.body.id })
         .then(async (user) => {
-          console.log(`id: ${req.body.id}, user: ${user["fName"]}`);
+//          console.log(`id: ${req.body.id}, user: ${user["fName"]}`);
           AppendDB([
             "", //initials
             hyperPath, //pic
