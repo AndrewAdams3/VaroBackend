@@ -152,7 +152,7 @@ router.post('/NewDB', async (req, res) => {
       latitude: req.body.lat,
       longitude: req.body.lon
     }
-  ).then(async (res2) => {
+  ).then(async () => {
     //console.log("Done!");
     await res.send({
       response: 0,
@@ -163,7 +163,7 @@ router.post('/NewDB', async (req, res) => {
       response: -1,
       message: "Form Incomplete"
     })
-    //console.log("err:" + err);
+    console.log("err:" + err);
   }
   )
 })
