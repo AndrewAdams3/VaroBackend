@@ -3,6 +3,7 @@ var router = express.Router();
 const multer = require('multer');
 const Path = require('path');
 const slash = require('slash');
+const Async = require('async');
 
 const fs = require('fs');
 const mkdirp = require('mkdirp');
@@ -123,49 +124,55 @@ router.post('/NewDB', async (req, res) => {
   //console.log("path: ", path);
   path = "https://" + path;
   let hyperPath = `=HYPERLINK("${path}","View Image")`;
-  User.findOne({ "_id": req.body.id })
-    .then( async (user) => {
-      console.log(`id: ${req.body.id}, user: ${user["fName"]}`);
-      await AppendDB([
-        "", //initials
-        hyperPath, //pic
-        date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear(), //date
-        street, //street
-        req.body.city, //city
-        req.body.state,
-        req.body.post, //zip
-        req.body.county,
-        type,
-        (user["fName"][0] + user["lName"][0])//driver name
-      ])
-    })
-  await DB.create(
-    {
-      address: req.body.address,
-      picturePath: path, // req.body.path,
-      date: req.body.date,
-      type: type,
-      vacant: req.body.vacant,
-      burned: req.body.burned,
-      boarded: req.body.boarded,
-      finder: req.body.id,
-      latitude: req.body.lat,
-      longitude: req.body.lon
-    }
-  ).then(async () => {
-    //console.log("Done!");
-    await res.send({
-      response: 0,
-      message: "Submission Complete!"
-    });
-  }, async (err) => {
-    await res.send({
-      response: -1,
-      message: "Form Incomplete"
-    })
-    console.log("err:" + err);
-  }
-  )
+  Async.parallel([
+    () =>
+      User.findOne({ "_id": req.body.id })
+        .then(async (user) => {
+          console.log(`id: ${req.body.id}, user: ${user["fName"]}`);
+          AppendDB([
+            "", //initials
+            hyperPath, //pic
+            date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear(), //date
+            street, //street
+            req.body.city, //city
+            req.body.state,
+            req.body.post, //zip
+            req.body.county,
+            type,
+            (user["fName"][0] + user["lName"][0])//driver name
+          ])
+        }),
+    () =>
+      DB.create(
+        {
+          address: req.body.address,
+          picturePath: path, // req.body.path,
+          date: req.body.date,
+          type: type,
+          vacant: req.body.vacant,
+          burned: req.body.burned,
+          boarded: req.body.boarded,
+          finder: req.body.id,
+          latitude: req.body.lat,
+          longitude: req.body.lon
+        }
+      )
+  ], (err, results) => {
+      if(!err){
+        res.send({
+          response: 0,
+          message: "Submission Complete!"
+        });
+      }
+      res.send({
+        response: -1,
+        message: "Form Incomplete"
+      })
+  })
+  res.send({
+    response: 0,
+    message: "Good Submit"
+  })
 })
 
 module.exports = router;
