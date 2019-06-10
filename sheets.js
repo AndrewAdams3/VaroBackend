@@ -69,13 +69,13 @@ function getNewToken(oAuth2Client, callback) {
 }
 function appendRow(auth, data) {
   const sheets = google.sheets({ version: 'v4', auth });
-  ////console.log("data", data);
+  //console.log("data", data);
   var request = {
     // The ID of the spreadsheet to update.
     spreadsheetId: '1tXGvEaXKGvkJoLCM4GNs5uuO1seupeBarC13UZRqH5s', //"1IeIOmvfcHc6tTFwjOEs4qT4Q0yJIwfVsnkLSmC0LuKc" 1tXGvEaXKGvkJoLCM4GNs5uuO1seupeBarC13UZRqH5s
     // The A1 notation of a range to search for a logical table of data.
     // Values will be appended after the last row of the table.
-    range: 'New Drive-By *test*', // main -- New Drive-By *test*
+    range: 'New Drive-By *test*!A:A', // main -- New Drive-By *test*
     // How the input data should be interpreted.
     valueInputOption: 'USER_ENTERED',
     // How the input data should be inserted.
@@ -83,7 +83,7 @@ function appendRow(auth, data) {
     resource: {
       "values": [data]
     },
-    auth: auth,
+    auth: auth
   };
   sheets.spreadsheets.values.append(request, function (err, response) {
     if (err) {

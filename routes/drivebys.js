@@ -126,10 +126,8 @@ router.post('/NewDB', async (req, res) => {
     default:
       break;
   }
-  let oldDate = new Date(req.body.date);
-  let newDate = oldDate.getTime() - oldDate.getTimezoneOffset();
-  let date = new Date(newDate);
-  console.log(`old Date: ${oldDate} and new Date: ${date}`);
+  let date = new Date(req.body.date);
+  //console.log(`req: ${req.body.date} old Date: ${oldDate} and new Date: ${date}`);
   let street = req.body.address.substring(0, req.body.address.indexOf(","))
   let path = Path.join("s3-us-west-1.amazonaws.com/varodrive/" + req.body.path);
   path = Path.normalize(path);
@@ -152,7 +150,7 @@ router.post('/NewDB', async (req, res) => {
             req.body.post, //zip
             req.body.county,
             type,
-            (user["fName"][0] + user["lName"][0])//driver name
+            (user["fName"][0].toUpperCase() + user["lName"][0].toUpperCase())//driver name
           ])
         }),
     () =>
