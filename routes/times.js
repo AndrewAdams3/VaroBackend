@@ -9,6 +9,9 @@ router.post('/newTime', (req, res) => {
     userId: req.body.id,
     startLocation: req.body.sLocation,
   })
+  res.send({
+    ok: true
+  })
   //console.log(req.body.sTime + "stime: " + req.body.sTime);
 })
 
@@ -79,9 +82,13 @@ router.put('/endTime', (req, res) => {
   }, (err) => {
     if (err) {
       //console.log("err with tc: " + err);
-      return;
+      res.send({
+        ok: false
+      });
     }
-    //    //console.log("put success");
+    res.send({
+      ok: true
+    })
   })
 })
 

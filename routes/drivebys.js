@@ -127,7 +127,7 @@ router.post('/NewDB', async (req, res) => {
       break;
   }
   let date = new Date(req.body.date);
-  //console.log(`req: ${req.body.date} old Date: ${oldDate} and new Date: ${date}`);
+  let nd = date.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' })
   let street = req.body.address.substring(0, req.body.address.indexOf(","))
   let path = Path.join("s3-us-west-1.amazonaws.com/varodrive/" + req.body.path);
   path = Path.normalize(path);
@@ -143,7 +143,7 @@ router.post('/NewDB', async (req, res) => {
           AppendDB([
             "", //initials
             hyperPath, //pic
-            date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear(), //date
+            nd,
             street, //street
             req.body.city, //city
             req.body.state,
