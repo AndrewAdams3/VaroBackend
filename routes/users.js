@@ -268,12 +268,15 @@ router.post('/login', (req, res) => {
   User.findOne({ "email": req.body.email, "password": pass }).exec((err, res2) => {
     if (err) {
       //console.log("Login Error\n" + err);
-      return;
+      res.send({
+        err: err
+      });
     }
     if (!res2) {
       //console.log("Invalid user / pass");
       res.send({
-        loggedIn: false
+        loggedIn: false,
+        admin: false
       });
     } else {
       res2["seshId"] = generate_key();
