@@ -57,6 +57,13 @@ var UserSchema = new Schema({
   admin: {
     type: Boolean,
     default: false
+  },
+  webSesh: {
+    type: Object,
+    default: {
+      lastPage: "",
+      seshId: ""
+    }
   }
 });
 

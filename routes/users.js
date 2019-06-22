@@ -33,6 +33,12 @@ router.get('/', function(req, res, next) {
   });
 });
 
+router.get('/byId/:id', function (req, res, next) {
+  User.findOne({"_id": req.params.id}).then(function (user) {
+    res.send(user);
+  });
+});
+
 router.put('/update', function (req, res) {
   User.findOne({ "_id": req.body.id }, (err, doc) => {
     if (err) {
@@ -61,6 +67,17 @@ router.put('/update', function (req, res) {
       })
     }
   });
+})
+
+router.put('/webSesh', (req, res) => {
+  console.log(req.body);
+  let seshId = generate_key();
+  User.findOneAndUpdate({"_id": req.body.id}, {
+    webShesh: {
+      lastPage: req.body.lastPage || "",
+      seshId: seshId || ""
+    }
+  })
 })
 
 router.put('/onclock', function (req, res) { // change /data/users to /onclock
@@ -118,7 +135,13 @@ router.put('/profilePic', function (req, res) {
 router.put('/logout', function (req, res) {
   //console.log("id: " + req.body.id)
   //console.log("onclock: " + req.body.value);
-  User.findOneAndUpdate({ "_id": req.body.id }, { "seshId": req.body.value }, (err) => {
+  User.findOneAndUpdate({ "_id": req.body.id }, { 
+    "seshId": req.body.value, 
+    "webShesh": {
+      lastPage: req.body.lastPage || "",
+      seshId: seshId || ""
+    }
+  }, (err) => {
     if (err) {
       //console.log("error: " + err)
       res.send({
@@ -134,10 +157,11 @@ router.put('/logout', function (req, res) {
 });
 
 router.post('/id', function (req, res) {
+  console.log("test", req.body.seshId);
   User.findOne({ "seshId": req.body.seshId }).then(function (user) {
     if (user) {
       let picture = user["profilePic"].replace(/\\/g, "/");
-      //console.log("user: " + user["_id"]);
+      console.log("user: " + user["_id"]);
       res.send({
         userId: user["_id"],
         pic: picture,
@@ -160,7 +184,7 @@ router.post('/id', function (req, res) {
     res.send({
       ok: 0
     })
-    //console.log("id found err: " + err)
+    console.log("id found err: " + err)
   });
 });
 
@@ -286,10 +310,13 @@ router.post('/login', (req, res) => {
         seshId: res2["seshId"],
         userId: res2["_id"],
         verified: res2["verified"],
-        admin: res2["admin"]
+        admin: res2["admin"],
+        user: res2
       })
     }
   });
 })
+
+
 
 module.exports = router;

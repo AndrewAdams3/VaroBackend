@@ -29,7 +29,10 @@ const mongoip = '127.0.0.1';
 var url = 'mongodb://' + mongoip + ':2771/VaroDB';
 //var url = 'mongodb://varodb:varopass@' + mongoip + ':2771/VaroDB';
 
-mongoose.connect(url, { useNewUrlParser: true });
+mongoose.connect(url, { useNewUrlParser: true })
+  .catch( (err) => {
+    console.log("mongo error", err);
+  })
 mongoose.Promise = global.Promise;
 
 // view engine setup
