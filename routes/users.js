@@ -48,18 +48,20 @@ router.put('/update', function (req, res) {
       })
     } else {
       //console.log("params: ", req.body.fName, req.body.lName, req.body.city);
+      if(req.body.complete)
+        doc["infoComplete"] = req.body.complete
       if (req.body.fName)
-        doc["fName"] = req.body.fName
+        doc["fName"] = req.body.fName.trim().toLowerCase()
       if (req.body.lName)
-        doc["lName"] = req.body.lName
+        doc["lName"] = req.body.lName.trim().toLowerCase()
       if (req.body.email)
-        doc["email"] = req.body.email
+        doc["email"] = req.body.email.trim().toLowerCase()
       if (req.body.city)
-        doc["city"] = req.body.city
+        doc["city"] = req.body.city.trim().toLowerCase()
       if (req.body.state)
-        doc["state"] = req.body.state
+        doc["state"] = req.body.state.trim().toLowerCase()
       if (req.body.address) {
-        doc["mailingAddress"] = req.body.address;
+        doc["mailingAddress"] = req.body.address.trim().toLowerCase()
       }
       doc.save();
       res.send({
@@ -99,8 +101,6 @@ router.put('/onclock', function (req, res) { // change /data/users to /onclock
 });
 
 router.post('/profilePic', upload2.single('image'), async (req, res) => {
-  for (var i in req.body)
-    //console.log("test: " + i);
   if (req.file) {
     res.send({
       response: 0,
@@ -135,13 +135,15 @@ router.put('/profilePic', function (req, res) {
 router.put('/logout', function (req, res) {
   //console.log("id: " + req.body.id)
   //console.log("onclock: " + req.body.value);
+  lp = req.body.lp ? req.body.lp : ""
+  si = req.body.si ? req.body.si : ""
   User.findOneAndUpdate({ "_id": req.body.id }, { 
     "seshId": req.body.value, 
     "webShesh": {
-      lastPage: req.body.lastPage || "",
-      seshId: seshId || ""
+      lastPage: lp,
+      seshId: si
     }
-  }, (err) => {
+  }, (err, doc, r) => {
     if (err) {
       //console.log("error: " + err)
       res.send({
@@ -157,11 +159,9 @@ router.put('/logout', function (req, res) {
 });
 
 router.post('/id', function (req, res) {
-  console.log("test", req.body.seshId);
   User.findOne({ "seshId": req.body.seshId }).then(function (user) {
     if (user) {
       let picture = user["profilePic"].replace(/\\/g, "/");
-      console.log("user: " + user["_id"]);
       res.send({
         userId: user["_id"],
         pic: picture,
@@ -172,6 +172,7 @@ router.post('/id', function (req, res) {
         address: user["mailingAddress"] || "",
         isVerified: user["verified"],
         email: user["email"],
+        infoComplete: user["infoComplete"],
         ok: 1
       });
     }
@@ -189,7 +190,7 @@ router.post('/id', function (req, res) {
 });
 
 router.post('/signup', (req, res) => {
-  User.find({ "email": req.body.email }, (err, res2) => {
+  User.find({ "email": req.body.email.trim().toLowerCase() }, (err, res2) => {
     if (err) {
       //console.log("Signup Error\n" + err);
       return;
@@ -200,7 +201,7 @@ router.post('/signup', (req, res) => {
       User.create(
         {
           password: pass,
-          email: req.body.email,
+          email: req.body.email.trim().toLowerCase(),
           seshId: seshId
         }
       ).then((user) => {
@@ -289,7 +290,7 @@ router.get('/signup/verification/:id', (req, res) => {
 
 router.post('/login', (req, res) => {
   var pass = encryptPass(req.body.password)
-  User.findOne({ "email": req.body.email, "password": pass }).exec((err, res2) => {
+  User.findOne({ "email": req.body.email.trim().toLowerCase(), "password": pass }).exec((err, res2) => {
     if (err) {
       //console.log("Login Error\n" + err);
       res.send({

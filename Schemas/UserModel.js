@@ -64,6 +64,11 @@ var UserSchema = new Schema({
       lastPage: "",
       seshId: ""
     }
+  },
+  infoComplete: {
+    type: Boolean,
+    required: true,
+    default: false
   }
 });
 

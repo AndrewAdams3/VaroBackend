@@ -136,24 +136,33 @@ router.post('/NewDB', async (req, res) => {
   path = "https://" + path;
   let hyperPath = `=HYPERLINK("${path}","View Image")`;
   Async.parallel([
-    () =>
+    (cb) =>{
       User.findOne({ "_id": req.body.id })
         .then(async (user) => {
-//          console.log(`id: ${req.body.id}, user: ${user["fName"]}`);
-          AppendDB([
-            "", //initials
-            hyperPath, //pic
-            nd,
-            street, //street
-            req.body.city, //city
-            req.body.state,
-            req.body.post, //zip
-            req.body.county,
-            type,
-            (user["fName"][0].toUpperCase() + user["lName"][0].toUpperCase())//driver name
-          ])
-        }),
-    () =>
+          DB.find({address:req.body.address}, (err, docs) => {
+            if(docs.length){
+              console.log("docs found already");
+              cb(null, true);
+            }
+            else{
+              AppendDB([
+                "", //initials
+                hyperPath, //pic
+                nd,
+                street, //street
+                req.body.city, //city
+                req.body.state,
+                req.body.post, //zip
+                req.body.county,
+                type,
+                (user["fName"][0].toUpperCase() + user["lName"][0].toUpperCase())//driver name
+              ])
+              cb(null, false);
+            }
+          })
+        })
+      },
+    (cb) =>{
       DB.create(
         {
           address: req.body.address,
@@ -168,21 +177,23 @@ router.post('/NewDB', async (req, res) => {
           longitude: req.body.lon
         }
       )
+      cb(null);
+    }
   ], (err, results) => {
+    console.log("already?", results[0]);
       if(!err){
         res.send({
           response: 0,
-          message: "Submission Complete!"
+          message: "Submission Complete!",
+          already: results[0]
         });
+      }else{
+        console.error(err);
+        res.send({
+          response: -1,
+          message: "Form Incomplete"
+        })
       }
-      res.send({
-        response: -1,
-        message: "Form Incomplete"
-      })
-  })
-  res.send({
-    response: 0,
-    message: "Good Submit"
   })
 })
 

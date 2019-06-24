@@ -44,6 +44,10 @@ var DriveBy = new Schema({
   finder: {
     type: String,
     required: true
+  },
+  lastFound: {
+    type: Number,
+    required: false
   }
 });
 
