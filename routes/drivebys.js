@@ -109,20 +109,16 @@ router.post('/NewDB', async (req, res) => {
   var type = ''
   switch (req.body.type) {
     case 0:
-      type = 'NOD'
-      break;
-    case 1:
-      type = 'HHS'
-      break;
-    case 2:
-      type = 'DB'
-      break;
-    case 3:
-      type = 'Tax Auction'
-      break;
-    case 4:
       type = 'Lot'
       break;
+    case 1:
+      type = 'SFH'
+      break;
+    case 2:
+      type = 'MUB'
+      break;
+    case 3:
+      type = "Assignment"
     default:
       break;
   }
@@ -132,16 +128,14 @@ router.post('/NewDB', async (req, res) => {
   let path = Path.join("s3-us-west-1.amazonaws.com/varodrive/" + req.body.path);
   path = Path.normalize(path);
   path = slash(path);
-  //console.log("path: ", path);
   path = "https://" + path;
   let hyperPath = `=HYPERLINK("${path}","View Image")`;
   Async.parallel([
     (cb) =>{
       User.findOne({ "_id": req.body.id })
         .then(async (user) => {
-          DB.find({address:req.body.address}, (err, docs) => {
-            if(docs.length){
-              console.log("docs found already");
+          DB.find({"address":req.body.address}, (err, docs) => {
+            if(docs.length > 1){
               cb(null, true);
             }
             else{

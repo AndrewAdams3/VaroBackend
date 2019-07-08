@@ -18,6 +18,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var drivebyRouter = require('./routes/drivebys');
 var timesRouter = require('./routes/times');
+var assignmentsRouter = require('./routes/assignments');
 
 //Storage
 app.use('/file', express.static(path.join(__dirname + '/file')))
@@ -34,6 +35,7 @@ mongoose.connect(url, { useNewUrlParser: true })
     console.log("mongo error", err);
   })
 mongoose.Promise = global.Promise;
+mongoose.set('useFindAndModify', false);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -54,6 +56,7 @@ app.use('/', indexRouter);
 app.use('/data/users', usersRouter);
 app.use('/data/drivebys', drivebyRouter);
 app.use('/data/times', timesRouter);
+app.use('/data/assignments', assignmentsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

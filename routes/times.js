@@ -15,39 +15,22 @@ router.post('/newTime', (req, res) => {
   //console.log(req.body.sTime + "stime: " + req.body.sTime);
 })
 
-router.post('/byId', (req, res) => {
-  TimeClock.find({ "userId": req.body.id }, (err, times) => {
-    if (!err) {
-      if (req.body.sDate) {
-        var sd = new Date(req.body.sDate);
-        var ed = new Date(req.body.eDate);
-        var ts = times.map((time) => {
-          var d = new Date(time.startTime);
-          if (d.getTime() > sd.getTime() && d.getTime() < ed.getTime()) {
-            return time;
-          }
-        })
-        ts.sort( (a, b) => {
-          let at = new Date(a.startTime).getTime(), bt = new Date(b.startTime).getTime()
-          ////console.log("at, bt", at, bt);
-          return bt - at;
-        });
-        res.send({
-          times: ts
-        })
-        return;
-      }
-      times.sort((a, b) => {
-        let at = new Date(a.startTime).getTime(), bt = new Date(b.startTime).getTime()
-        ////console.log("at, bt", at, bt);
-        return bt - at;
-      });
-      res.send({
-        times: times
-      })
-      return;
-    }
-    //console.log("err: " + err);
+router.get('/byId/:id/:sTime/:eTime', (req, res) => {
+  let times = TimeClock.find({
+    userId: req.params.id,
+    "startTime": { $gte: new Date(req.params.sTime).getTime(), $lte: new Date(req.params.eTime).getTime()}
+  }).limit(30).sort("-startTime");
+  times.exec((err, docs) => {
+    res.send(docs);
+  })
+})
+
+router.get('/byId/:id/', (req, res) => {
+  let times = TimeClock.find({
+    userId: req.params.id
+  }).limit(30).sort("-startTime");
+  times.exec((err, docs) => {
+    res.send(docs);
   })
 })
 

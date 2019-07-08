@@ -60,9 +60,6 @@ router.put('/update', function (req, res) {
         doc["city"] = req.body.city.trim().toLowerCase()
       if (req.body.state)
         doc["state"] = req.body.state.trim().toLowerCase()
-      if (req.body.address) {
-        doc["mailingAddress"] = req.body.address.trim().toLowerCase()
-      }
       doc.save();
       res.send({
         success: true
@@ -270,6 +267,7 @@ router.get('/signup/isVerified/:id', (req, res) => {
 })
 
 router.get('/signup/verification/:id', (req, res) => {
+  console.log("finding");
   User.findOne({ "_id": req.params.id }, (err, user) => {
     if (user) {
       user["verified"] = true;
@@ -317,7 +315,5 @@ router.post('/login', (req, res) => {
     }
   });
 })
-
-
 
 module.exports = router;
