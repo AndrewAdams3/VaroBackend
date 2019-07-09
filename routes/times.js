@@ -18,7 +18,7 @@ router.post('/newTime', (req, res) => {
 router.get('/byId/:id/:sTime/:eTime', (req, res) => {
   let times = TimeClock.find({
     userId: req.params.id,
-    "startTime": { $gte: new Date(req.params.sTime).getTime(), $lte: new Date(req.params.eTime).getTime()}
+    "startTime": { $gte: new Date(req.params.sTime).getTime(), $lte: new Date(req.params.eTime).getTime() + 86400000}
   }).limit(30).sort("-startTime");
   times.exec((err, docs) => {
     res.send(docs);

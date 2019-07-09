@@ -31,20 +31,19 @@ const storage = multer.diskStorage({
 })
 const upload = multer({ storage: storage });
 
-router.post('/byUserId', async (req, res) => {
-  //console.log("id test: " + req.body.id)
-  DB.find({ "finder": req.body.id }, (err, docs) => {
+router.post('/byUserId', (req, res) => {
+  let docs = DB.find({ "finder": req.body.id }).sort(req.body.sort).sort("-date").limit(req.body.limit);
+  docs.exec((err, dbs) => {
     if (err) {
-      //console.log(err);
+      console.log(err);
       res.send({
         response: -1
       })
     }
     else {
-      ////console.log(docs);
       res.send({
         response: 0,
-        docs: docs
+        docs: dbs
       })
     }
   })
@@ -174,7 +173,6 @@ router.post('/NewDB', async (req, res) => {
       cb(null);
     }
   ], (err, results) => {
-    console.log("already?", results[0]);
       if(!err){
         res.send({
           response: 0,

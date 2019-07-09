@@ -42,11 +42,26 @@ router.get('/byId/incomplete/:userId', (req, res, next) => {
 })
 
 router.put('/complete/byId/:id', (req, res, next) => {
-  Assignments.findOneAndUpdate({
-    "_id": req.params.id
-  }, {completed: true}, (err, doc, res) => {
-    if(!err) res.send({ok: -1});
-    else res.send({ok: 1});
+  Assignments.findOne({
+    "_id": req.params.id,
+  }, (err, doc) => {
+    if (err) res.send({ ok: -1 });
+    if(doc){
+      let c = true;
+      for(var i = 0; i < doc.Addresses.length; i++){
+        if(doc.Addresses[i].completed === false){
+          c = false;
+          break;
+        }
+      }
+      if(c){
+        doc["completed"] = true;
+        doc.save();
+      }
+      res.send({ ok: 1 });
+    } else {
+      res.send({ok: 1});
+    }
   })
 })
 
@@ -55,17 +70,14 @@ router.put('/complete/one/:userId', (req, res) => {
     "userId": req.params.userId,
     "Addresses": { $elemMatch: {address: req.body.address} }
   }, {
-    $set: { "Addresses.$[element].completed": true} },
-    {
+    $set: { "Addresses.$[element].completed": true} 
+  },{
       multi: true,
       arrayFilters: [{ "element.address": { $eq: req.body.address } }]
-    }, (err, data) => {
-      if(!err){
-        res.send({ok: 1});
-      } else{
-        res.send({ok: -1})
-      }
-    })
+  }, (err, data) => {
+    if (!err) res.send({ ok: -1 });
+    else res.send({ ok: 1 });
+  })
 })
 
 module.exports=router;
