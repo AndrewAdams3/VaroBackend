@@ -46,7 +46,7 @@ router.put('/complete/byId/:id', (req, res, next) => {
     "_id": req.params.id,
   }, (err, doc) => {
     if (err) res.send({ ok: -1 });
-    if(doc){
+    else if(doc){
       let c = true;
       for(var i = 0; i < doc.Addresses.length; i++){
         if(doc.Addresses[i].completed === false){
@@ -75,8 +75,8 @@ router.put('/complete/one/:userId', (req, res) => {
       multi: true,
       arrayFilters: [{ "element.address": { $eq: req.body.address } }]
   }, (err, data) => {
-    if (!err) res.send({ ok: -1 });
-    else res.send({ ok: 1 });
+    if (!err) res.send({ ok: 1 });
+    else res.send({ ok: -1 });
   })
 })
 

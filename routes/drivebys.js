@@ -156,21 +156,20 @@ router.post('/NewDB', async (req, res) => {
         })
       },
     (cb) =>{
-      DB.create(
-        {
-          address: req.body.address,
-          picturePath: path, // req.body.path,
-          date: req.body.date,
-          type: type,
-          vacant: req.body.vacant,
-          burned: req.body.burned,
-          boarded: req.body.boarded,
-          finder: req.body.id,
-          latitude: req.body.lat,
-          longitude: req.body.lon
-        }
-      )
-      cb(null);
+      DB.create({
+        address: req.body.address,
+        picturePath: path, // req.body.path,
+        date: req.body.date,
+        type: type,
+        vacant: req.body.vacant,
+        burned: req.body.burned,
+        boarded: req.body.boarded,
+        finder: req.body.id,
+        latitude: req.body.lat,
+        longitude: req.body.lon
+      }).then(()=>cb(null)).catch((err)=>{
+        cb(err);
+      })
     }
   ], (err, results) => {
       if(!err){
@@ -179,8 +178,7 @@ router.post('/NewDB', async (req, res) => {
           message: "Submission Complete!",
           already: results[0]
         });
-      }else{
-        console.error(err);
+      } else {
         res.send({
           response: -1,
           message: "Form Incomplete"
