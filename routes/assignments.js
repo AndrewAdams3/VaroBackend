@@ -9,10 +9,15 @@ router.post('/addAssignment', (req, res, next) => {
     Addresses: assignment,
     Date: date,
     userId: userId
-  })
-
-  res.send({
-    tst: "ok"
+  }).then(()=>{
+    res.send({
+      ok: true
+    })
+  }).catch((err) => {
+    console.error(err);
+    res.send({
+      ok: false
+    })
   })
 })
 
