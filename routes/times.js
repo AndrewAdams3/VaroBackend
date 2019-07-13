@@ -28,7 +28,7 @@ router.get('/byId/:id/:sTime/:eTime', (req, res) => {
 router.get('/byId/:id/:limit', (req, res) => {
   let times = TimeClock.find({
     userId: req.params.id,
-  }).limit(req.params.limit).sort("-startTime");
+  }).limit(Number(req.params.limit)).sort("-startTime");
   times.exec((err, docs) => {
     res.send(docs);
   })
