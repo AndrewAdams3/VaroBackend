@@ -6,15 +6,19 @@ var Schema = mongoose.Schema;
 var DriveBy = new Schema({
   address: {
     type: String,
-    default: '',
+    required: true
+  },
+  street: {
+    type: String,
+    required: true
   },
   longitude: {
     type: Number,
-    default: 0,
+    required: true
   },
   latitude: {
     type: Number,
-    default: 0
+    required: true
   },
   picturePath: {
     type: String,

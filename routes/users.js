@@ -316,4 +316,21 @@ router.post('/login', (req, res) => {
   });
 })
 
+router.put('/makeAdmin/:id', (req, res, next) => {
+
+  User.find({_id: req.params.id}, (err, doc) => {
+    if(!err){
+      console.log(doc);
+      doc["admin"] = true;
+      res.send({
+        ok: true
+      })
+    } else{
+      console.error(err);
+      res.end();
+    }
+  })
+
+})
+
 module.exports = router;

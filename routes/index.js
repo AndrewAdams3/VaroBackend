@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var Async = require('async');
 
 const getLocation = require("../getLocation");
 

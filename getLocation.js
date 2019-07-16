@@ -13,10 +13,6 @@ function getLocation (lat, lon, result, callback){
 
   var geocoder = NodeGeocoder(options);
 
-/*   geocoder.geocode(address, function (err, res) {
-    if(err) console.log(err);
-    console.log(res);
-  }); */
   geocoder.reverse({ lat: lat, lon: lon}, (err, res) => {
     if(err) {
       console.error(err);

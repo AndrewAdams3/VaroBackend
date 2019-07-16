@@ -117,13 +117,14 @@ router.post('/NewDB', async (req, res) => {
       type = 'MUB'
       break;
     case 3:
-      type = "Assignment"
+      type = "COM"
+      break;
     default:
+      type = "Assignment"
       break;
   }
   let date = new Date(req.body.date);
   let nd = date.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' })
-  let street = req.body.address.substring(0, req.body.address.indexOf(","))
   let path = Path.join("s3-us-west-1.amazonaws.com/varodrive/" + req.body.path);
   path = Path.normalize(path);
   path = slash(path);
@@ -133,31 +134,29 @@ router.post('/NewDB', async (req, res) => {
     (cb) =>{
       User.findOne({ "_id": req.body.id })
         .then(async (user) => {
-          DB.find({"address":req.body.address}, (err, docs) => {
-            if(docs.length > 1){
-              cb(null, true);
-            }
-            else{
-              AppendDB([
-                "", //initials
-                hyperPath, //pic
-                nd,
-                street, //street
-                req.body.city, //city
-                req.body.state,
-                req.body.post, //zip
-                req.body.county,
-                type,
-                (user["fName"][0].toUpperCase() + user["lName"][0].toUpperCase())//driver name
-              ])
-              cb(null, false);
-            }
+          DB.find({
+            street: req.body.street
+          }, (err, docs) => {
+            AppendDB([
+              "", //initials
+              hyperPath, //pic
+              nd,
+              req.body.street, //street
+              req.body.city, //city
+              req.body.state,
+              req.body.post, //zip
+              req.body.county,
+              type,
+              (user["fName"][0].toUpperCase() + user["lName"][0].toUpperCase())//driver name
+            ])
+            cb(null, docs.length > 1 ? true : false);
           })
         })
       },
     (cb) =>{
       DB.create({
         address: req.body.address,
+        street: req.body.street,
         picturePath: path, // req.body.path,
         date: req.body.date,
         type: type,
