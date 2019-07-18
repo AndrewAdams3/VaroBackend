@@ -316,12 +316,12 @@ router.post('/login', (req, res) => {
   });
 })
 
-router.put('/makeAdmin/:id', (req, res, next) => {
-
-  User.find({_id: req.params.id}, (err, doc) => {
+router.put('/makeAdmin/:id/:value', (req, res, next) => {
+  User.findOneAndUpdate(
+    {_id: req.params.id},
+    {admin: req.params.value},
+     (err, doc) => {
     if(!err){
-      console.log(doc);
-      doc["admin"] = true;
       res.send({
         ok: true
       })
@@ -330,7 +330,17 @@ router.put('/makeAdmin/:id', (req, res, next) => {
       res.end();
     }
   })
+})
 
+router.delete('/byId/:id', (req, res, next) => {
+  User.findOneAndDelete({_id: req.params.id}, (err, doc) => {
+    if (!err) {
+      res.send({ok: true});
+    } else {
+      console.error(err);
+      res.send({ok: false})
+    }
+  })
 })
 
 module.exports = router;
