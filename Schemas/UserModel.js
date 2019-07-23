@@ -42,10 +42,6 @@ var UserSchema = new Schema({
     type: Boolean,
     default: false
   },
-  mailingAddress: {
-    type: String,
-    default: ''
-  },
   city: {
     type: String,
     default: ''

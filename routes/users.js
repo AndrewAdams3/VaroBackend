@@ -166,7 +166,6 @@ router.post('/id', function (req, res) {
         lName: user["lName"] || "",
         city: user["city"] || "",
         state: user["state"] || "",
-        address: user["mailingAddress"] || "",
         isVerified: user["verified"],
         email: user["email"],
         infoComplete: user["infoComplete"],
