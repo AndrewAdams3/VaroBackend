@@ -27,8 +27,7 @@ app.use('/file', express.static(path.join(__dirname + '/file')))
 //Mongo Setup
 const mongoip = '127.0.0.1';
 
-var url = 'mongodb://' + mongoip + ':2771/VaroDB';
-//var url = 'mongodb://varodb:varopass@' + mongoip + ':2771/VaroDB';
+var url = "mongodb+srv://main:mainpass@varodrive-6necc.azure.mongodb.net/test?retryWrites=true&w=majority"
 
 mongoose.connect(url, { useNewUrlParser: true })
   .catch( (err) => {
