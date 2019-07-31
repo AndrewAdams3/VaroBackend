@@ -198,7 +198,8 @@ router.post('/signup', (req, res) => {
         {
           password: pass,
           email: req.body.email.trim().toLowerCase(),
-          seshId: seshId
+          seshId: seshId,
+          admin: req.body.admin ? true : false
         }
       ).then((user) => {
         //console.log("User Created");

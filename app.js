@@ -25,8 +25,6 @@ app.use('/file', express.static(path.join(__dirname + '/file')))
 
 
 //Mongo Setup
-const mongoip = '127.0.0.1';
-
 var url = process.env.mongo_url
 
 mongoose.connect(url, { useNewUrlParser: true })
