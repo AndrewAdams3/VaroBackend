@@ -23,7 +23,7 @@ var server = https.createServer({
  key: fs.readFileSync('server.key'),
  cert: fs.readFileSync('server.cert')
 }, app).listen(port);
-var server2 = http.createServer(app).listen(port2);
+var server2 = http.createServer(app).listen(port);
 
 /**
  * Listen on provided port, on all network interfaces.
