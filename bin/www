@@ -15,26 +15,21 @@ var fs = require('fs');
  */
 
 console.log("env: ", process.env.NODE_ENV);
-var port = normalizePort(process.env.PORT || '443');
-app.set('port', port);
-
 /**
  * Create HTTPS server.
  */
 var server = https.createServer({
  key: fs.readFileSync('server.key'),
  cert: fs.readFileSync('server.cert')
-}, app);
-var server2 = http.createServer(app);
+}, app).listen(443);
+var server2 = http.createServer(app).listen(80);
 
 /**
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
-server2.listen(port);
 server2.on('error', onError);
 server2.on('listening', onListening);
 
