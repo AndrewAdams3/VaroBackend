@@ -16,16 +16,27 @@ var fs = require('fs');
  */
 
 console.log("env: ", process.env.NODE_ENV);
-var port = normalizePort(process.env.PORT || '3210');
+var port = normalizePort(process.env.PORT || '443');
 app.set('port', port);
 
 /**
  * Create HTTPS server.
  */
 
+const domain = process.env.ip;
 app2.get('*', (req, res, res)=> {
  res.redirect("https://" + domain + req.path);
 })
+app2.post('*', (req, res, res) => {
+  res.redirect("https://" + domain + req.path);
+})
+app2.put('*', (req, res, res) => {
+  res.redirect("https://" + domain + req.path);
+})
+app2.delete('*', (req, res, res) => {
+  res.redirect("https://" + domain + req.path);
+})
+
 var redirect = http.createServer(app2).listen(3210, ()=>{
  console.log("testing");
 })
