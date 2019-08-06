@@ -15,14 +15,16 @@ var fs = require('fs');
  */
 
 console.log("env: ", process.env.NODE_ENV);
+var port = normalizePort(443);
+var port2 = normalizePort(80);
 /**
  * Create HTTPS server.
  */
 var server = https.createServer({
  key: fs.readFileSync('server.key'),
  cert: fs.readFileSync('server.cert')
-}, app).listen(443);
-var server2 = http.createServer(app).listen(80);
+}, app).listen(port);
+var server2 = http.createServer(app).listen(port2);
 
 /**
  * Listen on provided port, on all network interfaces.
