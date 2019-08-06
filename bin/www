@@ -15,8 +15,7 @@ var fs = require('fs');
  */
 
 console.log("env: ", process.env.NODE_ENV);
-var port = normalizePort(443);
-var port2 = normalizePort(80);
+var port = normalizePort(3210);
 /**
  * Create HTTPS server.
  */
