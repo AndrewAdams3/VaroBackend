@@ -5,8 +5,10 @@
  */
 
 var app = require('../app');
+var app2 = require('express')();
 var debug = require('debug')('varobackend:server');
 var https = require('https');
+var http = require('http');
 var fs = require('fs');
 
 /**
@@ -20,6 +22,13 @@ app.set('port', port);
 /**
  * Create HTTPS server.
  */
+
+app2.get('*', (req, res, res)=> {
+ res.redirect("https://" + domain + req.path);
+})
+var redirect = http.createServer(app2).listen(3210, ()=>{
+ console.log("testing");
+})
 
 var server = https.createServer({
  key: fs.readFileSync('server.key'),
