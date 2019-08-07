@@ -132,6 +132,7 @@ router.post('/NewDB', async (req, res) => {
     (cb) =>{
       User.findOne({ "_id": req.body.id })
         .then(async (user) => {
+          console.log("st", req.body.street);
           DB.find({
             street: req.body.street
           }, (err, docs) => {
