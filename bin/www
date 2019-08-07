@@ -5,10 +5,8 @@
  */
 
 var app = require('../app');
-var app2 = require('express')();
 var debug = require('debug')('varobackend:server');
 var https = require('https');
-var http = require('http');
 var fs = require('fs');
 
 /**
@@ -32,12 +30,6 @@ var port = normalizePort(3210);
     cert: certificate,
     ca: ca
   };
-
-  app2.use((req, res)=>{
-    console.log("port 80 to secure");
-    res.redirect('https://' + req.headers.host + req.url);
-  })
- var httpserver = http.createServer(app2).listen(80);
  var server = https.createServer(credentials, app).listen(port);
 
 /**
