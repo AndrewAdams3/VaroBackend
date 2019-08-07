@@ -23,9 +23,9 @@ var port = normalizePort(3210);
  */
 
  // Certificate
-  const privateKey = fs.readFileSync('/etc/letsencrypt/live/varodrive.xyz/privkey.pem', 'utf8');
-  const certificate = fs.readFileSync('/etc/letsencrypt/live/varodrive.xyz/cert.pem', 'utf8');
-  const ca = fs.readFileSync('/etc/letsencrypt/live/varodrive.xyz/chain.pem', 'utf8');
+  const privateKey = fs.readFileSync('../varodrive.xyz/privkey.pem', 'utf8');
+  const certificate = fs.readFileSync('../varodrive.xyz/cert.pem', 'utf8');
+  const ca = fs.readFileSync('../varodrive.xyz/chain.pem', 'utf8');
 
   const credentials = {
     key: privateKey,
