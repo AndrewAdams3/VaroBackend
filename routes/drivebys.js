@@ -70,7 +70,6 @@ router.get('/all', async (req, res) => {
 })
 
 router.post('/upload', upload.single('image'), async (req, res) => {
-  console.log("test", req);
   if (req.file) {
     Async.series([
         function (callback) {
@@ -83,9 +82,7 @@ router.post('/upload', upload.single('image'), async (req, res) => {
         }
     ], 
     function(err, res2) {
-      //console.log("exiting with " + res2);
       if (err) {
-        console.log(err);
         res.send({
           response: -1
         })
