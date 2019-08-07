@@ -71,7 +71,6 @@ router.get('/all', async (req, res) => {
 
 router.post('/upload', upload.single('image'), async (req, res) => {
   console.log("test", req);
-  console.log("testing: ", req.file.originalname);
   if (req.file) {
     Async.series([
         function (callback) {
