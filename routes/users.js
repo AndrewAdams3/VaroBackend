@@ -203,41 +203,42 @@ router.post('/signup', (req, res) => {
         }
       ).then((user) => {
         //console.log("User Created");
-        let transporter = nodemailer.createTransport({
-          host: 'smtp.gmail.com',
-          port: 587,
-          secure: false,
-          requireTLS: true,
-          auth: {
-            user: process.env.GMAIL_USERNAME,
-            pass: process.env.GMAIL_PASSWORD
-          }
-        });
-        var url = 'https://' + process.env.ip + ':3210/data/users/signup/verification/' + user["_id"];
-        var mailOptions = {
-          from: process.env.GMAIL_USERNAME,
-          to: req.body.email,
-          subject: 'VaroDrive email confirmation',
-          //text: 'Hello, please click the link to confirm this address',
-          html: `Hello, please click the link to confirm registration for VaroDrive\n` +
-            `Please disregard this message if you did not register for VaroDrive\n ${url}`
-        };
-        transporter.sendMail(mailOptions, function (err, info) {
-          if (err) {
-            //console.log("emailerr: ", err);
-            res.send({
-              created: false
-            })
-          }
-          else {
-            res.send({
-              created: true,
-              seshId: seshId,
-              userId: user["_id"]
-            });
-          }
-        });
-      })
+        if(!user.admin){
+          let transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false,
+            requireTLS: true,
+            auth: {
+              user: process.env.GMAIL_USERNAME,
+              pass: process.env.GMAIL_PASSWORD
+            }
+          });
+          var url = 'https://' + process.env.ip + ':3210/data/users/signup/verification/' + user["_id"];
+          var mailOptions = {
+            from: process.env.GMAIL_USERNAME,
+            to: req.body.email,
+            subject: 'VaroDrive email confirmation',
+            //text: 'Hello, please click the link to confirm this address',
+            html: `Hello, please click the link to confirm registration for VaroDrive\n` +
+              `Please disregard this message if you did not register for VaroDrive\n ${url}`
+          };
+          transporter.sendMail(mailOptions, function (err, info) {
+            if (err) {
+              //console.log("emailerr: ", err);
+              res.send({
+                created: false
+              })
+            }
+            else {
+              res.send({
+                created: true,
+                seshId: seshId,
+                userId: user["_id"]
+              });
+            }
+          });
+      }})
     } else {
       res.send({ created: false });
     }
