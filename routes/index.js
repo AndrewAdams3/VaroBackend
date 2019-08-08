@@ -41,7 +41,7 @@ router.post('/email-verify', (req, res) => {
     to: req.body.email,
     subject: 'Verify New User',
     //text: 'Hello, please click the link to confirm this address',
-    html: <h1></h1>
+    html: `<h1>${req.body.user}</h1>`
   };
   transporter.sendMail(mailOptions, function (err, info) {
     if (err) {
