@@ -134,7 +134,7 @@ router.post('/NewDB', async (req, res) => {
         .then(async (user) => {
           console.log("st", req.body.street);
           DB.find({
-            street: req.body.street
+            street: req.body.street,
           }, (err, docs) => {
             AppendDB([
               "", //initials

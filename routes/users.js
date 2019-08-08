@@ -239,7 +239,6 @@ router.post('/signup', (req, res) => {
         });
       })
     } else {
-      //console.log("User Already Exists");
       res.send({ created: false });
     }
   });
