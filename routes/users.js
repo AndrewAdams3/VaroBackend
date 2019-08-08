@@ -1,4 +1,5 @@
 var express = require('express');
+const cors = require('cors');
 var router = express.Router();
 const multer = require('multer');
 const nodemailer = require('nodemailer');
@@ -26,6 +27,7 @@ const storage2 = multer.diskStorage({
 const upload2 = multer({ storage: storage2 });
 
 
+router.options('*', cors());
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   User.find({}).then(function (users) {

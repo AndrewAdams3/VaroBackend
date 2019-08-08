@@ -58,14 +58,6 @@ app.use(bodyParser.json({ limit: '10mb', extended: true }));
 app.use(cors());
 app.use(compression());
 
-//Cors
-app.options("/*", function (req, res, next) {
-  console.log("data: ", req.body);
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
-  res.send(200);
-});
 //Routes
 app.use('/', indexRouter);
 app.use('/data/users', usersRouter);
