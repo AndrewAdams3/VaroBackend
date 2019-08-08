@@ -26,6 +26,7 @@ router.get('/location/:lat/:lon', (req, res, next) => {
 })
 
 router.post('/email-verify', (req, res) => {
+  console.log("test", req.body);
   let transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,
@@ -44,18 +45,11 @@ router.post('/email-verify', (req, res) => {
     html: `<h1>${req.body.user}</h1>`
   };
   transporter.sendMail(mailOptions, function (err, info) {
-    if (err) {
-      //console.log("emailerr: ", err);
-      res.send({
-        created: false
-      })
-    }
-    else {
-      res.send({
-        created: true,
-        seshId: seshId,
-        userId: user["_id"]
-      });
+    console.log("err", err);
+    if(!err){
+      res.send({ok: true});
+    } else{
+      res.send({ok: false})
     }
   });
 })
