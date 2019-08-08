@@ -213,7 +213,7 @@ router.post('/signup', (req, res) => {
             pass: process.env.GMAIL_PASSWORD
           }
         });
-        var url = 'http://' + process.env.ip + ':3210/data/users/signup/verification/' + user["_id"];
+        var url = 'https://' + process.env.ip + ':3210/data/users/signup/verification/' + user["_id"];
         var mailOptions = {
           from: process.env.GMAIL_USERNAME,
           to: req.body.email,
