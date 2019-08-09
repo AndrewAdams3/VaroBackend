@@ -55,7 +55,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json({ limit: '10mb', extended: true }));
-app.use(cors());
+app.use(cors({preflightContinue: true}));
 app.use(compression());
 
 //Routes
