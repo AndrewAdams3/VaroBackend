@@ -21,12 +21,10 @@ function sendLoc(res, loc) {
 }
 
 router.get('/location/:lat/:lon', (req, res, next) => {
-  //console.log("req", req.params);
   getLocation(Number(req.params.lat), Number(req.params.lon), res, sendLoc);
 })
 
 router.post('/email-verify', (req, res) => {
-  console.log("test", req.body);
   let transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,

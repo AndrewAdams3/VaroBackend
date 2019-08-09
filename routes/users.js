@@ -187,10 +187,6 @@ router.post('/id', function (req, res) {
   });
 });
 
-router.options('/signup', (req, res, next)=> {
-  console.log("optioning");
-  res.send({ok: true});
-})
 router.post('/signup', (req, res) => {
   User.find({ "email": req.body.email.trim().toLowerCase() }, (err, res2) => {
     if (err) {
@@ -209,7 +205,7 @@ router.post('/signup', (req, res) => {
         }
       ).then((user) => {
         //console.log("User Created");
-        if(!user.admin){
+        if(!req.body.admin){
           let transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
             port: 587,
