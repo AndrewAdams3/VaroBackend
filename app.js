@@ -59,7 +59,6 @@ app.use(cors({preflightContinue: true}));
 app.use(compression());
 
 //Routes
-app.options('*', cors())
 app.use('/', indexRouter);
 app.use('/data/users', usersRouter);
 app.use('/data/drivebys', drivebyRouter);
