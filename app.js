@@ -55,10 +55,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json({ limit: '10mb', extended: true }));
-app.use(cors());
+app.use(cors({origin: "https://propertyspotters.me"}));
 app.use(compression());
 
 //Routes
+app.options('*', cors())
 app.use('/', indexRouter);
 app.use('/data/users', usersRouter);
 app.use('/data/drivebys', drivebyRouter);
