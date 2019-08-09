@@ -188,6 +188,7 @@ router.post('/id', function (req, res) {
 });
 
 router.options('/signup', (req, res, next)=> {
+  console.log("optioning");
   res.send({ok: true});
 })
 router.post('/signup', (req, res) => {
