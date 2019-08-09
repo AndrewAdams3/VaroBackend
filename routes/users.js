@@ -187,6 +187,9 @@ router.post('/id', function (req, res) {
   });
 });
 
+router.options('/signup', (req, res, next)=> {
+  res.send({ok: true});
+})
 router.post('/signup', (req, res) => {
   User.find({ "email": req.body.email.trim().toLowerCase() }, (err, res2) => {
     if (err) {
