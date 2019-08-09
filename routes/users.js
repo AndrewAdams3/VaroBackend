@@ -187,7 +187,7 @@ router.post('/id', function (req, res) {
   });
 });
 
-router.post('/signup', cors(), (req, res) => {
+router.post('/signup', (req, res) => {
   User.find({ "email": req.body.email.trim().toLowerCase() }, (err, res2) => {
     if (err) {
       //console.log("Signup Error\n" + err);
