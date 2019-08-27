@@ -109,10 +109,10 @@ router.post('/NewDB', async (req, res) => {
       type = 'Lot'
       break;
     case 1:
-      type = 'SFH'
+      type = 'SFR'
       break;
     case 2:
-      type = 'MUB'
+      type = 'MFR'
       break;
     case 3:
       type = "COM"
