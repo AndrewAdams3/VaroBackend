@@ -105,4 +105,16 @@ router.post('/addtask/:userId', (req, res)=>{
   })
 })
 
+router.get('task/byId/:userId', (req, res) => {
+  Users.find({
+    _id: req.params.userId
+  }, (err, res) => {
+    if(err) res.send({})
+    else {
+      console.log("test", res, res.currentTask);
+      res.send({ok: true});
+    }
+  })
+})
+
 module.exports=router;
