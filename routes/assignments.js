@@ -6,10 +6,11 @@ const Users = require('../Schemas/UserModel');
 
 
 router.post('/addAssignment', (req, res, next) => {
-  const { assignment, date, userId } = req.body;
+  const { assignment, date, userId, notes } = req.body;
   Assignments.create({
     Addresses: assignment,
     Date: date,
+    notes: notes,
     userId: userId
   }).then(()=>{
     res.send({

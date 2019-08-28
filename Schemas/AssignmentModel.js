@@ -22,6 +22,10 @@ var AssignmentSchema = new Schema({
   completed: {
     type: Boolean,
     default: false
+  },
+  notes: {
+    type: String,
+    required: false
   }
 });
 var Assignment = mongoose.model('Assignment', AssignmentSchema);
