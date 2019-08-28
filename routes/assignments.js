@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 
 const Assignments = require('../Schemas/AssignmentModel');
+const Users = require('../Schemas/UserModel');
+
 
 router.post('/addAssignment', (req, res, next) => {
   const { assignment, date, userId } = req.body;
@@ -82,6 +84,22 @@ router.put('/complete/one/:userId', (req, res) => {
   }, (err, data) => {
     if (!err) res.send({ ok: 1 });
     else res.send({ ok: -1 });
+  })
+})
+
+router.post('/addtask/:userId', (req, res)=>{
+  Users.findOneAndUpdate({
+    userId: req.params.userId
+  }, {
+    currentTask: {
+      area: req.body.task,
+      date: req.body.date
+    }
+  }, (err, doc)=>{
+    if(!err){
+      res.send({ok: true})
+    }
+    else res.send({ok: false})
   })
 })
 

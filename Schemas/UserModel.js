@@ -65,6 +65,10 @@ var UserSchema = new Schema({
     type: Boolean,
     required: true,
     default: false
+  },
+  currentTask: {
+    area: String,
+    date: Date || Number
   }
 });
 
