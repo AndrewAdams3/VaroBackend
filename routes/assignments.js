@@ -106,16 +106,13 @@ router.post('/addtarget/:userId', (req, res)=>{
 })
 
 router.get('/target/byId/:userId', (req, res) => {
-  Users.find({
+  Users.findOne({
     _id: req.params.userId
-  }, (err, res) => {
+  }, (err, res2) => {
     if(err) res.send({})
     else {
-      console.log("test", res);
-      res.send({
-        target: res["target"].area,
-        date: res["target"].date
-      });
+      console.log("test", res2);
+      res.send(res2.target);
     }
   })
 })
