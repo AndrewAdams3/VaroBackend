@@ -88,7 +88,6 @@ router.put('/complete/one/:userId', (req, res) => {
 })
 
 router.post('/addtask/:userId', (req, res)=>{
-  console.log("test", req.body.task, req.body.date)
   Users.findOneAndUpdate({
     _id: req.params.userId
   }, {
@@ -97,12 +96,10 @@ router.post('/addtask/:userId', (req, res)=>{
       date: req.body.date
     }
   }, (err, doc)=>{
-    console.log("doc", doc);
     if(!err){
       res.send({ok: true})
     }
   else {
-    console.log("err",err);
     res.send({ok: false})
   }
   })
