@@ -87,12 +87,12 @@ router.put('/complete/one/:userId', (req, res) => {
   })
 })
 
-router.post('/addtask/:userId', (req, res)=>{
+router.post('/addtarget/:userId', (req, res)=>{
   Users.findOneAndUpdate({
     _id: req.params.userId
   }, {
-    currentTask: {
-      area: req.body.task,
+    target: {
+      area: req.body.target,
       date: req.body.date
     }
   }, (err, doc)=>{
@@ -105,16 +105,16 @@ router.post('/addtask/:userId', (req, res)=>{
   })
 })
 
-router.get('/task/byId/:userId', (req, res) => {
+router.get('/target/byId/:userId', (req, res) => {
   Users.find({
     _id: req.params.userId
   }, (err, res) => {
     if(err) res.send({})
     else {
-      console.log("test", res, res.currentTask);
+      console.log("test", res);
       res.send({
-        task: res.currentTask.area,
-        date: res.currentTask.date
+        target: res["target"].area,
+        date: res["target"].date
       });
     }
   })
