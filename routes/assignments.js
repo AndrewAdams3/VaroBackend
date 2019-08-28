@@ -112,7 +112,6 @@ router.get('/target/byId/:userId', (req, res) => {
   }, (err, res2) => {
     if(err) res.send({})
     else {
-      console.log("test", res2.target);
       res.send(res2.target);
     }
   })
