@@ -90,7 +90,7 @@ router.put('/complete/one/:userId', (req, res) => {
 router.post('/addtask/:userId', (req, res)=>{
   console.log("test", req.body.task, req.body.date)
   Users.findOneAndUpdate({
-    userId: req.params.userId
+    _id: req.params.userId
   }, {
     currentTask: {
       area: req.body.task,
