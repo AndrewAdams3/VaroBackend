@@ -142,7 +142,7 @@ router.post('/NewDB', async (req, res) => {
               nd,
               req.body.street, //street
               req.body.city, //city
-              req.body.state === undefined ? req.body.address : req.body.street,
+              req.body.state,
               req.body.post, //zip
               req.body.county,
               type,
