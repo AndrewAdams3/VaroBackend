@@ -49,6 +49,16 @@ router.post('/byUserId', (req, res) => {
   })
 })
 
+router.get('/all/:skip', async(req, res) => {
+  DB.find({}).sort("-date").limit(50).skip(req.params.skip).then((err, docs)=>{
+    if(err){
+      res.send({response: -1, docs: []})
+    } else{
+      res.send({response: 0, docs: docs})
+    }
+  })
+})
+
 router.get('/all', async (req, res) => {
   //console.log("getting");
   DB.find({}, (err, docs) => {
@@ -66,7 +76,6 @@ router.get('/all', async (req, res) => {
       })
     }
   })
-
 })
 
 router.post('/upload', upload.single('image'), async (req, res) => {
