@@ -194,4 +194,20 @@ router.post('/NewDB', async (req, res) => {
   })
 })
 
+router.put('/updateDB', (req, res, next) => {
+  DB.findOneAndUpdate({
+    _id: req.body.id
+  }, {
+    [req.body.field]: req.body.update
+  }, (err, doc) => {
+    if(err){
+      console.log(err)
+      res.send({ok: false})
+    } else{
+      console.log(doc);
+      res.send({ok: true})
+    }
+  })
+})
+
 module.exports = router;
