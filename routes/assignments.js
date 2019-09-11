@@ -24,6 +24,40 @@ router.post('/addAssignment', (req, res, next) => {
   })
 })
 
+router.delete('/deleteAssignment', (req, res, next) => {
+  const { id } = req.body;
+  Assignments.findByIdAndRemove(id, (err, doc) => {
+    if(!err){
+      console.log("deleted")
+      res.send({ok: true})
+    } else {
+      console.log("err deleting", err);
+      res.send({ok: false})
+    }
+  })
+})
+
+router.put('/deleteSubAssignment', (req, res, next) => {
+  const { id, ass } = req.body;
+  Assignments.findOne({
+    _id: id
+  }, (err, res) => {
+    if(!err){
+      console.log("doc found: ", res);
+      for(var i = 0; i < res.Addresses.length; i++){
+        if(res.Addresses[i].address === ass){
+          console.log("found ass");
+        }
+      }
+//      res.save()
+      res.send({ok: true});
+    } else{
+      console.log("err deleting sub ass", err)
+      res.send({ok: false});
+    }
+  })
+})
+
 router.get('/byId/:userId', (req, res, next) => {
   var docs = Assignments.find({
     "userId": req.params.userId
