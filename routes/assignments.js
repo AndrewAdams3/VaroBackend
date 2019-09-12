@@ -72,6 +72,19 @@ router.get('/byId/:userId', (req, res, next) => {
   })
 })
 
+router.get('/one/byId/:id', (req, res) => {
+  Assignments.findOne({
+    _id: req.params.id
+  }, (err, doc) => {
+      if (!err) {
+        res.send(doc);
+      }
+      else {
+        res.send({});
+      }
+  });
+})
+
 router.get('/byId/incomplete/:userId', (req, res, next) => {
   Assignments.find({
     "userId": req.params.userId,
