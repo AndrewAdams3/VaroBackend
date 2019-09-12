@@ -41,11 +41,11 @@ router.put('/deleteSubAssignment', (req, res, next) => {
   const { id, ass } = req.body;
   Assignments.findOne({
     _id: id
-  }, (err, res) => {
+  }, (err, doc) => {
     if(!err){
-      console.log("doc found: ", res);
-      for(var i = 0; i < res.Addresses.length; i++){
-        if(res.Addresses[i].address === ass){
+      console.log("doc found: ", doc);
+      for(var i = 0; i < doc.Addresses.length; i++){
+        if(doc.Addresses[i].address === ass){
           console.log("found ass");
         }
       }
