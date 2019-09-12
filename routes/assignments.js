@@ -44,13 +44,13 @@ router.put('/deleteSubAssignment', (req, res, next) => {
   }, (err, doc) => {
     if(!err){
       console.log("doc found: ", doc, "\n", doc.Addresses);
-      let noAss = doc.Addresses.filter( ass => ass.name !== ass ); 
+      let noAss = doc.Addresses.filter( obj => obj._id !== ass ); 
       console.log("no ass", noAss);
-      for(var i = 0; i < doc.Addresses.length; i++){
-        if(doc.Addresses[i].address === ass){
-          doc.Addresses.split(i,1);
-        }
-      }
+      // for(var i = 0; i < doc.Addresses.length; i++){
+      //   if(doc.Addresses[i].address === ass){
+      //     doc.Addresses.split(i,1);
+      //   }
+      // }
       doc.save()
       res.send({ok: true});
     } else{
