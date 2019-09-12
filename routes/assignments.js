@@ -26,7 +26,7 @@ router.post('/addAssignment', (req, res, next) => {
 
 router.delete('/deleteAssignment/:id', (req, res) => {
   const { id } = req.params;
-  Assignments.findById(id).then((doc)=>console.log(doc))
+  
   Assignments.deleteOne({_id: id}, (err) => {
     if(!err){
       res.send({ok: true})
