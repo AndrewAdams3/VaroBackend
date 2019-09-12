@@ -24,11 +24,11 @@ router.post('/addAssignment', (req, res, next) => {
   })
 })
 
-router.delete('/deleteAssignment', (req, res, next) => {
-  const { id } = req.body;
-  Assignments.findByIdAndRemove(id, (err, doc) => {
+router.delete('/deleteAssignment/:id', (req, res) => {
+  const { id } = req.params;
+  Assignments.findById(id).then((doc)=>console.log(doc))
+  Assignments.deleteOne({_id: id}, (err) => {
     if(!err){
-      console.log("deleted")
       res.send({ok: true})
     } else {
       console.log("err deleting", err);
@@ -43,15 +43,13 @@ router.put('/deleteSubAssignment', (req, res, next) => {
     _id: id
   }, (err, doc) => {
     if(!err){
-      console.log("doc found: ", doc, "\n", doc.Addresses);
-      let noAss = doc.Addresses.filter( obj => obj._id !== ass ); 
-      console.log("no ass", noAss);
-      // for(var i = 0; i < doc.Addresses.length; i++){
-      //   if(doc.Addresses[i].address === ass){
-      //     doc.Addresses.split(i,1);
-      //   }
-      // }
-      doc.save()
+      var noAss = doc.Addresses.filter(obj => String(obj._id) !== String(ass));
+      doc.Addresses = noAss
+      if(doc.Addresses.length === 0){
+        Assignments.deleteOne({_id: id}, (err)=>err ? console.log("err deleting", err) : console.log("ok deleting"))
+      } else{
+        doc.save()
+      }
       res.send({ok: true});
     } else{
       console.log("err deleting sub ass", err)
