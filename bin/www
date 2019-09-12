@@ -7,6 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('varobackend:server');
 var https = require('https');
+var http = require('http');
 var fs = require('fs');
 
 /**
@@ -20,17 +21,29 @@ var port = normalizePort(3210);
  * Create HTTPS server.
  */
 
- // Certificate
-  const privateKey = fs.readFileSync('/etc/letsencrypt/live/varodrive.xyz/privkey.pem', 'utf8');
-  const certificate = fs.readFileSync('/etc/letsencrypt/live/varodrive.xyz/cert.pem', 'utf8');
-  const ca = fs.readFileSync('/etc/letsencrypt/live/varodrive.xyz/chain.pem', 'utf8');
+var privateKey;
+var certificate;
+var ca;
 
-  const credentials = {
-    key: privateKey,
-    cert: certificate,
-    ca: ca
-  };
- var server = https.createServer(credentials, app).listen(port);
+var credentials = {};
+var server;
+
+ // Certificate
+ if(process.env.NODE_ENV === "production"){
+
+    privateKey = fs.readFileSync('/etc/letsencrypt/live/varodrive.xyz/privkey.pem', 'utf8');
+    certificate = fs.readFileSync('/etc/letsencrypt/live/varodrive.xyz/cert.pem', 'utf8');
+    ca = fs.readFileSync('/etc/letsencrypt/live/varodrive.xyz/chain.pem', 'utf8');
+
+    credentials = {
+      key: privateKey,
+      cert: certificate,
+      ca: ca
+    };
+    server = https.createServer(credentials, app).listen(port);
+ } else{
+   server = http.createServer(app).listen(port);
+ }
 
 /**
  * Listen on provided port, on all network interfaces.
