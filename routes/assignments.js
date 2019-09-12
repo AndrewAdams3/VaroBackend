@@ -43,7 +43,7 @@ router.put('/deleteSubAssignment', (req, res, next) => {
     _id: id
   }, (err, doc) => {
     if(!err){
-      console.log("doc found: ", doc);
+      console.log("doc found: ", doc, "\n", doc.Addresses);
       for(var i = 0; i < doc.Addresses.length; i++){
         if(doc.Addresses[i].address === ass){
           doc.Addresses.split(i,1);
