@@ -24,40 +24,6 @@ router.post('/addAssignment', (req, res, next) => {
   })
 })
 
-router.delete('/deleteAssignment/:id', (req, res) => {
-  const { id } = req.params;
-  
-  Assignments.deleteOne({_id: id}, (err) => {
-    if(!err){
-      res.send({ok: true})
-    } else {
-      console.log("err deleting", err);
-      res.send({ok: false})
-    }
-  })
-})
-
-router.put('/deleteSubAssignment', (req, res, next) => {
-  const { id, ass } = req.body;
-  Assignments.findOne({
-    _id: id
-  }, (err, doc) => {
-    if(!err){
-      var noAss = doc.Addresses.filter(obj => String(obj._id) !== String(ass));
-      doc.Addresses = noAss
-      if(doc.Addresses.length === 0){
-        Assignments.deleteOne({_id: id}, (err)=>err ? console.log("err deleting", err) : console.log("ok deleting"))
-      } else{
-        doc.save()
-      }
-      res.send({ok: true});
-    } else{
-      console.log("err deleting sub ass", err)
-      res.send({ok: false});
-    }
-  })
-})
-
 router.get('/byId/:userId', (req, res, next) => {
   var docs = Assignments.find({
     "userId": req.params.userId
@@ -160,6 +126,78 @@ router.get('/target/byId/:userId', (req, res) => {
     if(err) res.send({})
     else {
       res.send(res2.target);
+    }
+  })
+})
+
+router.delete('/deleteAssignment/:id', (req, res) => {
+  const { id } = req.params;
+  Assignments.deleteOne({_id: id}, (err) => {
+    if(!err){
+      res.send({ok: true})
+    } else {
+      console.log("err deleting", err);
+      res.send({ok: false})
+    }
+  })
+})
+
+router.put('/deleteSubAssignment', (req, res, next) => {
+  const { id, ass } = req.body;
+  Assignments.findOne({
+    _id: id
+  }, (err, doc) => {
+    if(!err){
+      var noAss = doc.Addresses.filter(obj => String(obj._id) !== String(ass));
+      doc.Addresses = noAss
+      if(doc.Addresses.length === 0){
+        Assignments.deleteOne({_id: id}, (err)=>err ? console.log("err deleting", err) : console.log("ok deleting"))
+      } else{
+        doc.save()
+      }
+      res.send({ok: true});
+    } else{
+      console.log("err deleting sub ass", err)
+      res.send({ok: false});
+    }
+  })
+})
+
+router.put('/update-assignment', (req, res) => {
+  const {id, sub_id, date, completed, newAss} = req.body;
+  Assignments.findOne({_id: id}, (err, doc) => {
+    if(!err){
+      if(doc){
+        if(String(sub_id).length){
+          let found = false
+          let done = true
+          doc.Addresses.map((add)=>{
+            if(String(add._id) === String(sub_id)){
+              found = true
+              add.completed = completed
+              add.address = String(newAss).length ? newAss : add.address
+            } else if(add.completed === false) done = false
+          })
+          if(!completed) doc.completed = false;
+          else doc.completed = done
+          doc.save();
+          res.send({ok: found ? true : false}).end();
+        } else{
+          if(date){
+            let d = new Date(date)
+            d.setDate(d.getDate()+1)
+            doc.Date = d
+          }
+          if(completed){
+            doc.Addresses.map((ass)=>{
+              ass.completed = true
+            })
+            doc.completed = true
+          } else doc.completed = false
+          doc.save();
+          res.send({ok: true})
+        }
+      }
     }
   })
 })
