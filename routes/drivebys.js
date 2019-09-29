@@ -141,7 +141,7 @@ router.post('/NewDB', async (req, res) => {
   let hyperPath = `=HYPERLINK("${path}","View Image")`;
   let res_add = ""
   if(req.body.street !== req.body.address){
-    res_add = req.body.address
+    res_add = req.body.street
   }
   Async.parallel([
     (cb) =>{
