@@ -139,12 +139,6 @@ router.post('/NewDB', async (req, res) => {
   path = slash(path);
   path = "https://" + path;
   let hyperPath = `=HYPERLINK("${path}","View Image")`;
-  let res_add = req.body.street
-  console.log("test", req.body.street, req.body.address)
-  if(req.body.street !== req.body.address){
-    console.log("getting user add", req.body.address)
-    res_add = req.body.address
-  }
   Async.parallel([
     (cb) =>{
       User.findOne({ "_id": req.body.id })
@@ -157,7 +151,7 @@ router.post('/NewDB', async (req, res) => {
               "", //initials
               hyperPath, //pic
               nd,
-              res_add, //street
+              req.body.street, //street
               req.body.city, //city
               req.body.state,
               req.body.post, //zip
