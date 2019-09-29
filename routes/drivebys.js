@@ -112,6 +112,7 @@ router.post('/upload', upload.single('image'), async (req, res) => {
 })
 
 router.post('/NewDB', async (req, res) => {
+  //support for legacy
   var type = ''
   switch (req.body.type) {
     case 0:
@@ -127,9 +128,10 @@ router.post('/NewDB', async (req, res) => {
       type = "COM"
       break;
     default:
-      type = "Assignment"
+      type = req.body.type
       break;
   }
+  // end legacy support
   let date = new Date(req.body.date);
   let nd = date.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' })
   let path = Path.join("s3-us-west-1.amazonaws.com/varodrive/" + req.body.path);
@@ -153,7 +155,7 @@ router.post('/NewDB', async (req, res) => {
               "", //initials
               hyperPath, //pic
               nd,
-              req.body.street, //street
+              res_add, //street
               req.body.city, //city
               req.body.state,
               req.body.post, //zip
@@ -171,7 +173,7 @@ router.post('/NewDB', async (req, res) => {
         street: req.body.street,
         picturePath: path, // req.body.path,
         date: req.body.date,
-        type: type,
+        type,
         vacant: req.body.vacant,
         burned: req.body.burned,
         boarded: req.body.boarded,
