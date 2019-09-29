@@ -229,7 +229,8 @@ router.post('/signup', (req, res) => {
             if (err) {
               //console.log("emailerr: ", err);
               res.send({
-                created: false
+                created: false,
+                msg: "Error creating account"
               })
             }
             else {
@@ -242,7 +243,7 @@ router.post('/signup', (req, res) => {
           });
       }})
     } else {
-      res.send({ created: false });
+      res.send({ created: false, msg: "Account already found" });
     }
   });
 })

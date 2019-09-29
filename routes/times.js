@@ -75,4 +75,41 @@ router.put('/endTime', (req, res) => {
   })
 })
 
+router.put('/update-time/start', (req, res) => {
+  const {id, startTime} = req.body;
+  TimeClock.findById(id, (err, doc) => {
+    if(!err){
+      if(doc){
+        doc.startTime = startTime;
+        doc.totalTime = doc.endTime - doc.startTime;
+        doc.save();
+        res.send({ok: true});
+      } else{
+        res.send({ok: false})
+      }
+    } else{
+      res.send({ok: false})
+    }
+  })
+})
+
+router.put('/update-time/end', (req, res) => {
+  const {id, endTime} = req.body;
+  console.log(id, endTime);
+  TimeClock.findById(id, (err, doc) => {
+    if(!err){
+      if(doc){
+        doc.endTime = endTime;
+        doc.totalTime = doc.endTime - doc.startTime;
+        doc.save();
+        res.send({ok: true});
+      } else{
+        res.send({ok: false})
+      }
+    } else{
+      res.send({ok: false})
+    }
+  })
+})
+
 module.exports = router;

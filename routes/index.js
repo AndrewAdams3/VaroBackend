@@ -21,7 +21,8 @@ function sendLoc(res, loc) {
 }
 
 router.get('/location/:lat/:lon', (req, res, next) => {
-  getLocation(Number(req.params.lat), Number(req.params.lon), res, sendLoc);
+  if(req.params.lat && req.params.lon)
+    getLocation(Number(req.params.lat), Number(req.params.lon), res, sendLoc);
 })
 
 router.post('/email-verify', (req, res) => {
