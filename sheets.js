@@ -75,7 +75,7 @@ function appendRow(auth, data) {
     spreadsheetId: '1tXGvEaXKGvkJoLCM4GNs5uuO1seupeBarC13UZRqH5s', //"1IeIOmvfcHc6tTFwjOEs4qT4Q0yJIwfVsnkLSmC0LuKc" 1tXGvEaXKGvkJoLCM4GNs5uuO1seupeBarC13UZRqH5s
     // The A1 notation of a range to search for a logical table of data.
     // Values will be appended after the last row of the table.
-    range: 'New Drive-By *test*!A3:A3', // main -- New Drive-By *test*
+    range: 'App Drive-By!A3:A3', // main -- New Drive-By *test*
     // How the input data should be interpreted.
     valueInputOption: 'USER_ENTERED',
     // How the input data should be inserted.
