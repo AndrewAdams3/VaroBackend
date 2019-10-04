@@ -101,12 +101,14 @@ router.put('/onclock', function (req, res) { // change /data/users to /onclock
 
 router.post('/profilePic', upload2.single('image'), async (req, res) => {
   if (req.file) {
+    console.log("sending fil path")
     res.send({
       response: 0,
       path: req.file.path
     })
   }
   else {
+    console.log("no file uploaded")
     res.send({
       response: -1
     })
@@ -175,15 +177,16 @@ router.post('/id', function (req, res) {
       });
     }
     else {
+      console.log("not found")
       res.send({
         ok: 0
       })
     }
   }, (err) => {
+    console.log("err", err)
     res.send({
       ok: 0
     })
-    console.log("id found err: " + err)
   });
 });
 
