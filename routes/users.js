@@ -296,13 +296,13 @@ router.post('/login', (req, res) => {
   var pass = encryptPass(req.body.password)
   User.findOne({ "email": req.body.email.trim().toLowerCase(), "password": pass }).exec((err, res2) => {
     if (err) {
-      //console.log("Login Error\n" + err);
+      console.log("Login Error\n" + err);
       res.send({
         err: err
       });
     }
     if (!res2) {
-      //console.log("Invalid user / pass");
+      console.log("Invalid user / pass");
       res.send({
         loggedIn: false,
         admin: false
@@ -310,6 +310,7 @@ router.post('/login', (req, res) => {
     } else {
       res2["seshId"] = generate_key();
       res2.save((err) => { err ? console.log("error: " + err) : {} });
+      console.log("res2", res2)
       res.send({
         loggedIn: true,
         seshId: res2["seshId"],
