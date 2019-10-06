@@ -240,7 +240,8 @@ router.post('/signup', (req, res) => {
               res.send({
                 created: true,
                 seshId: seshId,
-                userId: user["_id"]
+                userId: user["_id"],
+                user: user
               });
             }
           });
@@ -310,8 +311,7 @@ router.post('/login', (req, res) => {
     } else {
       res2["seshId"] = generate_key();
       res2.save((err) => { err ? console.log("error: " + err) : {} });
-      console.log("res2", res2)
-      res.send({
+        res.send({
         loggedIn: true,
         seshId: res2["seshId"],
         userId: res2["_id"],
