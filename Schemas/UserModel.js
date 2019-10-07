@@ -89,6 +89,7 @@ var UserSchema = new Schema({
       })
     ], (err, res)=>{
       if(err) console.log("error deleting user", err)
+      else console.log("deleted these: ", res);
       next()
     })
   })
