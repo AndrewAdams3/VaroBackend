@@ -2,6 +2,9 @@ var mongoose = require('mongoose');
 
 //Define a schema
 var Schema = mongoose.Schema;
+const TimeClock = require('./TimeClock')
+const Assignment = require("./AssignmentModel")
+const async = require('async')
 
 var UserSchema = new Schema({
   email: {
@@ -75,6 +78,20 @@ var UserSchema = new Schema({
   UserSchema.methods.newPass = function (password){
     return password;
   }
+
+  UserSchema.pre("remove", function(next, user) {
+    async.parallel([
+      TimeClock.deleteMany({
+        userId: user._id
+      }),
+      Assignment.deleteMany({
+        userId: user._id
+      })
+    ], (err, res)=>{
+      if(err) console.log("error deleting user", err)
+      next()
+    })
+  })
 
 var User = mongoose.model('User', UserSchema);
 

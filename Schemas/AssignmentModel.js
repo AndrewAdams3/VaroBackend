@@ -28,6 +28,7 @@ var AssignmentSchema = new Schema({
     required: false
   }
 });
+
 var Assignment = mongoose.model('Assignment', AssignmentSchema);
 
 module.exports=Assignment;
