@@ -59,6 +59,12 @@ router.get('/all/:skip', async(req, res) => {
   })
 })
 
+router.get('/byId/:id', (req, res) => {
+  DB.findById(req.params.id).then((doc)=>{
+    res.send(doc);
+  }).catch((err)=>{console.log("err getting db", err); req.send({})})
+})
+
 router.get('/all', async (req, res) => {
   //console.log("getting");
   DB.find({}, (err, docs) => {

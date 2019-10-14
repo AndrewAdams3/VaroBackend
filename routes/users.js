@@ -28,7 +28,7 @@ const upload2 = multer({ storage: storage2 });
 
 
 router.options('*', cors());
-/* GET users listing. */
+
 router.get('/', function(req, res, next) {
   User.find({}).then(function (users) {
     res.send(users);
@@ -49,7 +49,6 @@ router.put('/update', function (req, res) {
         success: false
       })
     } else {
-      //console.log("params: ", req.body.fName, req.body.lName, req.body.city);
       if(req.body.complete)
         doc["infoComplete"] = req.body.complete
       if (req.body.fName)
@@ -71,7 +70,6 @@ router.put('/update', function (req, res) {
 })
 
 router.put('/webSesh', (req, res) => {
-  console.log(req.body);
   let seshId = generate_key();
   User.findOneAndUpdate({"_id": req.body.id}, {
     webShesh: {
@@ -81,9 +79,7 @@ router.put('/webSesh', (req, res) => {
   })
 })
 
-router.put('/onclock', function (req, res) { // change /data/users to /onclock
-  //console.log("id: " + req.body.id)
-  //console.log("onclock: " + req.body.value);
+router.put('/onclock', function (req, res) {
   User.findOneAndUpdate({ "_id": req.body.id }, { "isOnClock": req.body.value }, (err) => {
     if (err) {
       //console.log("error: " + err)
@@ -116,8 +112,6 @@ router.post('/profilePic', upload2.single('image'), async (req, res) => {
 })
 
 router.put('/profilePic', function (req, res) {
-  //console.log("id: " + req.body.id)
-  //console.log("pic: " + req.body.value);
   User.findOneAndUpdate({ "_id": req.body.id }, { "profilePic": req.body.value }, (err) => {
     if (err) {
       //console.log("error: " + err)
@@ -134,8 +128,6 @@ router.put('/profilePic', function (req, res) {
 });
 
 router.put('/logout', function (req, res) {
-  //console.log("id: " + req.body.id)
-  //console.log("onclock: " + req.body.value);
   lp = req.body.lp ? req.body.lp : ""
   si = req.body.si ? req.body.si : ""
   User.findOneAndUpdate({ "_id": req.body.id }, { 
@@ -177,7 +169,6 @@ router.post('/id', function (req, res) {
       });
     }
     else {
-      console.log("not found")
       res.send({
         ok: 0
       })
@@ -274,7 +265,6 @@ router.get('/signup/isVerified/:id', (req, res) => {
 })
 
 router.get('/signup/verification/:id', (req, res) => {
-  console.log("finding");
   User.findOne({ "_id": req.params.id }, (err, user) => {
     if (user) {
       user["verified"] = true;
