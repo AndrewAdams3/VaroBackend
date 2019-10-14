@@ -6,6 +6,8 @@ const TimeClock = require('./TimeClock')
 const Assignment = require("./AssignmentModel")
 const async = require('async')
 
+const io = require('../socket').io;
+
 var UserSchema = new Schema({
   email: {
     type: String,
@@ -94,6 +96,25 @@ var UserSchema = new Schema({
     })
   })
 
-var User = mongoose.model('User', UserSchema);
+var UserModel = mongoose.model('User', UserSchema);
 
-module.exports=User;
+UserModel.watch().on("change", (update) => {
+  console.log("update", update.documentKey._id);
+  if(update.operationType === 'update'){
+    console.log("updated")
+    io.sockets.emit("update-user", update.documentKey._id);
+  } else if( update.operationType === 'insert') {
+    console.log("new user", update.documentKey._id);
+    io.sockets.emit("new-user", update.documentKey._id);
+  } else if(update.operationType === 'delete') {
+    console.log("deleting", update.documentKey._id);
+    io.sockets.emit("delete-user", update.documentKey._id);
+  } else if(update.operationType === 'replace') {
+    console.log("relpaced")
+    io.sockets.emit("update-user", update.documentKey._id);
+  } else {
+    console.log("this update", update)
+  }
+})
+
+module.exports=UserModel;
