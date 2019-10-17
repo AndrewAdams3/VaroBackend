@@ -151,62 +151,53 @@ router.post('/NewDB', async (req, res) => {
   path = slash(path);
   path = "https://" + path;
   let hyperPath = `=HYPERLINK("${path}","View Image")`;
-  Async.parallel([
-    (cb) =>{
-      User.findOne({ "_id": req.body.id })
-        .then(async (user) => {
-          console.log("st", req.body.street);
-          DB.find({
-            street: req.body.street,
-          }, (err, docs) => {
-
-            AppendDB([
-              "", //initials
-              hyperPath, //pic
-              nd,
-              req.body.street, //street
-              req.body.city, //city
-              req.body.state,
-              req.body.post, //zip
-              req.body.county,
-              type,
-              (user["fName"][0].toUpperCase() + user["lName"][0].toUpperCase())//driver name
-            ], user.state.toLowerCase())
-            cb(null, docs.length > 1 ? true : false);
-          })
-        })
-      },
-    (cb) =>{
-      DB.create({
-        address: req.body.address,
+  User.findOne({ "_id": req.body.id })
+    .then(async (user) => {
+      console.log("st", req.body.street);
+      DB.find({
         street: req.body.street,
-        picturePath: path, // req.body.path,
-        date: req.body.date,
-        type,
-        vacant: req.body.vacant,
-        burned: req.body.burned,
-        boarded: req.body.boarded,
-        finder: req.body.id,
-        latitude: req.body.lat,
-        longitude: req.body.lon
-      }).then(()=>cb(null)).catch((err)=>{
-        cb(err);
-      })
-    }
-  ], (err, results) => {
-      if(!err){
-        res.send({
-          response: 0,
-          message: "Submission Complete!",
-          already: results[0]
-        });
-      } else {
-        res.send({
-          response: -1,
-          message: "Form Incomplete"
+      }, (err, docs) => {
+        DB.create({
+          address: req.body.address,
+          street: req.body.street,
+          picturePath: path, // req.body.path,
+          date: req.body.date,
+          type,
+          vacant: req.body.vacant,
+          burned: req.body.burned,
+          boarded: req.body.boarded,
+          finder: req.body.id,
+          latitude: req.body.lat,
+          longitude: req.body.lon
+        }).then(()=>{
+          AppendDB([
+            "", //initials
+            hyperPath, //pic
+            nd,
+            req.body.street, //street
+            req.body.city, //city
+            req.body.state,
+            req.body.post, //zip
+            req.body.county,
+            type,
+            (user["fName"][0].toUpperCase() + user["lName"][0].toUpperCase())//driver name
+          ], user.state.toLowerCase())
+          res.send({
+            response: 0,
+            message: "Submission Complete!",
+            already: docs.length > 0 ? true : false
+          });
+        }).catch((err)=>{
+          console.log("err creating");
+          res.send({
+            response: -1,
+            message: "Form Incomplete"
+          })
+          return;
         })
-      }
-  })
+
+      })
+    })
 })
 
 router.put('/updateDB', (req, res, next) => {
