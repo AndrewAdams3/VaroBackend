@@ -53,6 +53,10 @@ var DriveBy = new Schema({
   lastFound: {
     type: Number,
     required: false
+  },
+  timeZone: {
+    type: String,
+    required: false
   }
 });
 
