@@ -12,7 +12,16 @@ function getLocation (lat, lon, result, callback){
     formatter: null         // 'gpx', 'string', ...
   };
   try{
-    console.log("url", `https://maps.googleapis.com/maps/api/timezone/json?location=${lat},${lon}&timestamp=${new Date().getTime()}&key=${process.env.GOOGLE_API_KEY}`);
+      var params = {
+        location: `${lat},${lon}`,
+        timestamp: Date.now,
+        key: process.env.GOOGLE_API_KEY 
+    };
+    var esc = encodeURIComponent;
+    var query = Object.keys(params)
+      .map(k => esc(k) + '=' + esc(params[k]))
+      .join('&');
+    console.log("url", `https://maps.googleapis.com/maps/api/timezone/json?${query}`, query);
     fetch(`https://maps.googleapis.com/maps/api/timezone/json?location=${lat},${lon}&timestamp=${new Date().getTime()}&key=${process.env.GOOGLE_API_KEY}`)
     .then((res)=> res.json())
     .then((json)=>{
