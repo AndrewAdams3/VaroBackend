@@ -12,6 +12,7 @@ function getLocation (lat, lon, result, callback){
     formatter: null         // 'gpx', 'string', ...
   };
   try{
+    console.log("url", `https://maps.googleapis.com/maps/api/timezone/json?location=${lat},${lon}&timestamp=${new Date().getTime()}&key=${process.env.GOOGLE_API_KEY}`);
     fetch(`https://maps.googleapis.com/maps/api/timezone/json?location=${lat},${lon}&timestamp=${new Date().getTime()}&key=${process.env.GOOGLE_API_KEY}`)
     .then((res)=> res.json())
     .then((json)=>{
