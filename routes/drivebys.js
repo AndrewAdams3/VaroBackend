@@ -152,7 +152,7 @@ router.post('/NewDB', async (req, res) => {
   path = "https://" + path;
   let hyperPath = `=HYPERLINK("${path}","View Image")`;
   User.findOne({ "_id": req.body.id })
-    .then(async (user) => {
+    .then((user) => {
       console.log("st", req.body.street);
       DB.find({
         street: req.body.street,
@@ -160,6 +160,7 @@ router.post('/NewDB', async (req, res) => {
         DB.create({
           address: req.body.address,
           street: req.body.street,
+          state: req.body.state.toLowerCase(),
           picturePath: path, // req.body.path,
           date: req.body.date,
           type,
@@ -168,7 +169,8 @@ router.post('/NewDB', async (req, res) => {
           boarded: req.body.boarded,
           finder: req.body.id,
           latitude: req.body.lat,
-          longitude: req.body.lon
+          longitude: req.body.lon,
+          lastFound: Date.now()
         }).then(()=>{
           AppendDB([
             "", //initials
@@ -188,7 +190,7 @@ router.post('/NewDB', async (req, res) => {
             already: docs.length > 0 ? true : false
           });
         }).catch((err)=>{
-          console.log("err creating");
+          console.log("err creating", err);
           res.send({
             response: -1,
             message: "Form Incomplete"

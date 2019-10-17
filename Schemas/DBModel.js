@@ -13,6 +13,11 @@ var DriveBy = new Schema({
     type: String,
     required: true
   },
+  state: {
+    type: String,
+    required: true,
+    default: "california"
+  },
   longitude: {
     type: Number,
     required: true
