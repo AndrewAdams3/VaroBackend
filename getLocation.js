@@ -11,25 +11,26 @@ function getLocation (lat, lon, result, callback){
     apiKey: process.env.GOOGLE_API_KEY, // for Mapquest, OpenCage, Google Premier
     formatter: null         // 'gpx', 'string', ...
   };
-  try{
-      var params = {
-        location: `${lat},${lon}`,
-        timestamp: Date.now,
-        key: process.env.GOOGLE_API_KEY 
-    };
-    var esc = encodeURIComponent;
-    var query = Object.keys(params)
-      .map(k => esc(k) + '=' + esc(params[k]))
-      .join('&');
-    console.log("url", `https://maps.googleapis.com/maps/api/timezone/json?${query}`, query);
-    fetch(`https://maps.googleapis.com/maps/api/timezone/json?location=${lat},${lon}&timestamp=${new Date().getTime()}&key=${process.env.GOOGLE_API_KEY}`)
-    .then((res)=> res.json())
-    .then((json)=>{
-      console.log("json", json)
-    })
-  } catch(err){
-    console.log("err", err)
-  }
+  //timezone stuff
+  // try{
+  //     var params = {
+  //       location: `${lat},${lon}`,
+  //       timestamp: Date.now,
+  //       key: process.env.GOOGLE_API_KEY 
+  //   };
+  //   var esc = encodeURIComponent;
+  //   var query = Object.keys(params)
+  //     .map(k => esc(k) + '=' + esc(params[k]))
+  //     .join('&');
+  //   console.log("url", `https://maps.googleapis.com/maps/api/timezone/json?${query}`, query);
+  //   fetch(`https://maps.googleapis.com/maps/api/timezone/json?location=${lat},${lon}&timestamp=${new Date().getTime()}&key=${process.env.GOOGLE_API_KEY}`)
+  //   .then((res)=> res.json())
+  //   .then((json)=>{
+  //     console.log("json", json)
+  //   })
+  // } catch(err){
+  //   console.log("err", err)
+  // }
 
   var geocoder = NodeGeocoder(options);
   

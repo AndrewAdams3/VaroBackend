@@ -133,6 +133,12 @@ router.post('/NewDB', async (req, res) => {
     case 3:
       type = "COM"
       break;
+    case "":
+      res.send({
+        response: -1,
+        message: "Form Incomplete"
+      })
+      return;
     default:
       type = req.body.type
       break;
@@ -153,6 +159,7 @@ router.post('/NewDB', async (req, res) => {
           DB.find({
             street: req.body.street,
           }, (err, docs) => {
+
             AppendDB([
               "", //initials
               hyperPath, //pic
@@ -164,7 +171,7 @@ router.post('/NewDB', async (req, res) => {
               req.body.county,
               type,
               (user["fName"][0].toUpperCase() + user["lName"][0].toUpperCase())//driver name
-            ])
+            ], user.state.toLowerCase())
             cb(null, docs.length > 1 ? true : false);
           })
         })
