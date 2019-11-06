@@ -43,6 +43,11 @@ var UserSchema = new Schema({
     type: String,
     default: ''
   },
+  trackId: {
+    type: String,
+    default: '',
+    required: false
+  },
   isOnClock: {
     type: Boolean,
     default: false

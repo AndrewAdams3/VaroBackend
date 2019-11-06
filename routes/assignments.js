@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 const Assignments = require('../Schemas/AssignmentModel');
+const AreaAssignments = require('../Schemas/AreaAssignment');
 const Users = require('../Schemas/UserModel');
 
 
@@ -21,6 +22,21 @@ router.post('/addAssignment', (req, res, next) => {
     res.send({
       ok: false
     })
+  })
+})
+
+router.post('/addAreaAssignment', (req, res)=>{
+  const { bounds, driver, date } = req.body;
+  AreaAssignments.create({
+    bounds: bounds,
+    date: new Date(date),
+    userId: driver
+  }).then(()=>{
+    console.log("ok")
+    res.send('ok')
+  }).catch((err)=>{
+    console.log("err", err)
+    res.send("not ok")
   })
 })
 

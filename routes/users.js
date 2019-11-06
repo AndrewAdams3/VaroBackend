@@ -165,6 +165,7 @@ router.post('/id', function (req, res) {
         isVerified: user["verified"],
         email: user["email"],
         infoComplete: user["infoComplete"],
+        onClock: user.isOnClock,
         ok: 1
       });
     }

@@ -19,6 +19,7 @@ var usersRouter = require('./routes/users');
 var drivebyRouter = require('./routes/drivebys');
 var timesRouter = require('./routes/times');
 var assignmentsRouter = require('./routes/assignments');
+const trackRouter = require('./routes/tracks');
 
 //Storage
 app.use('/file', express.static(path.join(__dirname + '/file')))
@@ -54,6 +55,7 @@ app.use('/data/users', usersRouter);
 app.use('/data/drivebys', drivebyRouter);
 app.use('/data/times', timesRouter);
 app.use('/data/assignments', assignmentsRouter);
+app.use('/data/tracks', trackRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
