@@ -153,7 +153,6 @@ router.post('/NewDB', async (req, res) => {
   let hyperPath = `=HYPERLINK("${path}","View Image")`;
   User.findOne({ "_id": req.body.id })
     .then((user) => {
-      console.log("st", req.body.street);
       DB.find({
         street: req.body.street,
       }, (err, docs) => {
