@@ -5,12 +5,14 @@ const Track = require("../Schemas/Track");
 router.post('/', (req, res) => {
     const { location, userId } = req.body;
     const { coords, timestamp } = location;
+    console.log("new loc", location);
     Track.findOne({
         userId: userId,
         date: new Date(timestamp).toLocaleDateString()
     }, (err, track) => {
         if(!err){
         if(track){
+            console.log("updating track")
             track.path = [...track.path, {
             latitude: coords.latitude,
             longitude: coords.longitude,
@@ -25,6 +27,7 @@ router.post('/', (req, res) => {
                     console.log('err updating track',err);
                 })
         } else {
+            console.log("creating track");
             Track.create({
             path: [{
                 latitude: coords.latitude,
