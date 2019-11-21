@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 const io = require('../socket').io;
+const runSnapToRoad = require("../helpers/snap-to-roads");
 
 //Define a schema
 var Schema = mongoose.Schema;
@@ -21,8 +22,26 @@ var TrackSchema = new Schema({
     userId: {
         type: String,
         required: true
+    },
+    complete: {
+        type: Boolean,
+        default: false
+    },
+    snappedLine: {
+        type: Object,
+        default: {} 
     }
 });
+
+TrackSchema.pre("save", async function(next, saveOptions) {
+    if(saveOptions.complete){
+        let snap = await runSnapToRoad(this.path);
+        this.snappedLine = snap;
+    }
+    next() 
+}, (err) => {
+    console.log("err", err)
+})
 
 var TrackModel = mongoose.model('Track', TrackSchema);
 

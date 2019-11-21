@@ -79,6 +79,10 @@ var UserSchema = new Schema({
   target: {
     area: String,
     date: Date || Number
+  },
+  tracker: {
+    type: String,
+    default: ""
   }
 });
 

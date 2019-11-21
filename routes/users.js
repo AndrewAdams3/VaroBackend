@@ -79,20 +79,14 @@ router.put('/webSesh', (req, res) => {
   })
 })
 
-router.put('/onclock', function (req, res) {
-  User.findOneAndUpdate({ "_id": req.body.id }, { "isOnClock": req.body.value }, (err) => {
-    if (err) {
-      //console.log("error: " + err)
-      res.send({
-        success: false
-      })
-    } else {
-      ////console.log("put success");
-      res.send({
-        success: true
-      })
-    }
-  });
+router.put('/onclock', async (req, res) => {
+  try{
+    await User.findByIdAndUpdate(req.body.id, {isOnClock: req.body.value})
+    res.send({success: true, tracker: ""})
+  } catch(err) {
+    console.log("err logging out", err)
+    res.send({success: false, tracker: ""})
+  }
 });
 
 router.post('/profilePic', upload2.single('image'), async (req, res) => {
@@ -166,6 +160,7 @@ router.post('/id', function (req, res) {
         email: user["email"],
         infoComplete: user["infoComplete"],
         onClock: user.isOnClock,
+        tracker: user.tracker,
         ok: 1
       });
     }

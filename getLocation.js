@@ -1,5 +1,4 @@
 var NodeGeocoder = require('node-geocoder');
-const fetch = require("node-fetch")
 
 // Using callback
 function getLocation (lat, lon, result, callback){
