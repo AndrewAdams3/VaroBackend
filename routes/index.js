@@ -12,7 +12,7 @@ router.get('/', function(req, res, next) {
 
 router.post('/zapTest', (req, res) => {
   console.log(req.body);
-  res.send('ok')
+  res.send({ok: 'ok'})
 })
   
 //Misc Routes
