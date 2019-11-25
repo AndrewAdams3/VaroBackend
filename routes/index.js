@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/zapTest', (req, res) => {
-  console.log(req.body);
+  console.log(req);
   res.send({ok: 'ok'})
 })
   
