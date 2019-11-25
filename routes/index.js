@@ -9,6 +9,11 @@ const getLocation = require("../getLocation");
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
+
+router.post('/zapTest', (req, res) => {
+  console.log(req.body);
+  res.send('ok')
+})
   
 //Misc Routes
 router.get('/file/uploads/profilePics/:name', function (req, res) {
