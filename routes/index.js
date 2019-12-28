@@ -10,9 +10,8 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-router.post('/zapTest', (req, res) => {
-  console.log(req.body);
-  res.send({ok: 'ok'})
+router.get('/form-test', (req, res) => {
+  res.render('index.jade');
 })
   
 //Misc Routes
