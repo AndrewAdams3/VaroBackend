@@ -23,8 +23,8 @@ function getLocation (lat, lon, result, callback){
       street: res[0].streetNumber + " " + res[0].streetName,
       address: res[0].formattedAddress,
       city: res[0].city,
-      county: res[0].administrativeLevels.level1short,
-      state: res[0].administrativeLevels.level2short,
+      county: res[0].administrativeLevels.level2short,
+      state: res[0].administrativeLevels.level1short,
       postal: res[0].zipcode,
       timeZone: ""
     };
