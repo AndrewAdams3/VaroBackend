@@ -1,71 +1,108 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
-const multer = require('multer');
-const Path = require('path');
-const slash = require('slash');
-const Async = require('async');
+const multer = require("multer");
+const Path = require("path");
+const slash = require("slash");
+const Async = require("async");
 
-const fs = require('fs');
-const mkdirp = require('mkdirp');
+const fs = require("fs");
+const mkdirp = require("mkdirp");
 
-const DB = require('../Schemas/DBModel');
-const User = require('../Schemas/UserModel');
+const DB = require("../Schemas/DBModel");
+const User = require("../Schemas/UserModel");
 
 //External Setups (AWS / Google Sheets)
-const uploadFile = require('../aws').uploadFile;
-const AppendDB = require('../sheets');
+const uploadFile = require("../aws").uploadFile;
+const AppendDB = require("../sheets");
 
 //Storage
 const storage = multer.diskStorage({
-  destination: async function (req, file, cb) {
-    const date = new Date()
-    var path = Path.join('file/uploads/', date.getFullYear().toString(), (date.getMonth() + 1).toString(), date.getDate().toString());
+  destination: async function(req, file, cb) {
+    const date = new Date();
+    var path = Path.join(
+      "file/uploads/",
+      date.getFullYear().toString(),
+      (date.getMonth() + 1).toString(),
+      date.getDate().toString()
+    );
     //console.log("path of new Image: ", path);
-    mkdirp(path, function (err) {
+    mkdirp(path, function(err) {
       cb(null, path);
     });
   },
-  filename: async function (req, file, cb) {
-    cb(null, file.originalname)
+  filename: async function(req, file, cb) {
+    cb(null, file.originalname);
   }
-})
+});
 const upload = multer({ storage: storage });
 
-router.post('/byUserId', (req, res) => {
-  let docs = DB.find({ "finder": req.body.id }).sort(req.body.sort).sort("-date").limit(req.body.limit);
+router.get("/byUserId/:userId/:limit/:sort", async (req, res) => {
+  try {
+    let docs = await DB.find({
+      finder: req.params.userId
+    })
+      .sort(req.params.sort)
+      .limit(Number(req.params.limit));
+    res.send({
+      response: 0,
+      docs: docs
+    });
+  } catch (err) {
+    console.log('err', err)
+    res.send({
+      response: -1,
+      docs: []
+    });
+  }
+});
+
+//old
+router.post("/byUserId", (req, res) => {
+  let docs = DB.find({ finder: req.body.id })
+    .sort(req.body.sort)
+    .sort("-date")
+    .limit(req.body.limit);
   docs.exec((err, dbs) => {
     if (err) {
       console.log(err);
       res.send({
         response: -1
-      })
-    }
-    else {
+      });
+    } else {
       res.send({
         response: 0,
         docs: dbs
-      })
+      });
     }
-  })
-})
+  });
+});
 
-router.get('/all/:skip', async(req, res) => {
-  DB.find({}).sort("-date").limit(50).skip(req.params.skip).then((err, docs)=>{
-    if(err){
-      res.send({response: -1, docs: []})
-    } else{
-      res.send({response: 0, docs: docs})
-    }
-  })
-})
+router.get("/all/:skip", async (req, res) => {
+  DB.find({})
+    .sort("-date")
+    .limit(50)
+    .skip(req.params.skip)
+    .then((err, docs) => {
+      if (err) {
+        res.send({ response: -1, docs: [] });
+      } else {
+        res.send({ response: 0, docs: docs });
+      }
+    });
+});
 
-router.get('/byId/:id', (req, res) => {
-  DB.findById(req.params.id).then((doc)=>{
-    res.send(doc);
-  }).catch((err)=>{console.log("err getting db", err); req.send({})})
-})
+router.get("/byId/:id", (req, res) => {
+  DB.findById(req.params.id)
+    .then(doc => {
+      res.send(doc);
+    })
+    .catch(err => {
+      console.log("err getting db", err);
+      req.send({});
+    });
+});
 
-router.get('/all', async (req, res) => {
+router.get("/all", async (req, res) => {
   //console.log("getting");
   DB.find({}, (err, docs) => {
     if (err) {
@@ -73,89 +110,104 @@ router.get('/all', async (req, res) => {
       res.send({
         response: -1,
         docs: []
-      })
-    }
-    else {
+      });
+    } else {
       res.send({
         response: 0,
         docs: docs
-      })
+      });
     }
-  })
-})
+  });
+});
 
-router.post('/upload', upload.single('image'), async (req, res) => {
+router.post("/upload", upload.single("image"), async (req, res) => {
   if (req.file) {
-    Async.series([
-        function (callback) {
-          uploadFile('varodrive', slash(req.file.path))
-          callback(null, 1)
+    Async.series(
+      [
+        function(callback) {
+          uploadFile("varodrive", slash(req.file.path));
+          callback(null, 1);
         },
-        function (callback) {
-          fs.unlink(req.file.path, (err) => {if(err) console.log(err)})
-          callback(null, 2)
+        function(callback) {
+          fs.unlink(req.file.path, err => {
+            if (err) console.log(err);
+          });
+          callback(null, 2);
         }
-    ], 
-    function(err, res2) {
-      if (err) {
-        res.send({
-          response: -1
-        })
+      ],
+      function(err, res2) {
+        if (err) {
+          res.send({
+            response: -1
+          });
+        } else {
+          res.send({
+            response: 0,
+            path: slash(req.file.path)
+          });
+        }
       }
-      else{
-        res.send({
-          response: 0,
-          path: slash(req.file.path)
-        })
-      }
-    })
-  }
-  else {
+    );
+  } else {
     res.send({
       response: -1
-    })
+    });
   }
+});
+
+router.post('/upload-db', (req, res) => {
+  console.log('req', req.body)
+  console.log('files', req.file, "files", req.files)
+  const date = new Date();
+  var path = Path.join(
+    "file/uploads/",
+    date.getFullYear().toString(),
+    (date.getMonth() + 1).toString(),
+    date.getDate().toString()
+  );
+  res.send({ok: true})
 })
 
-router.post('/NewDB', async (req, res) => {
+router.post("/NewDB", async (req, res) => {
   //support for legacy
-  var type = ''
+  var type = "";
   switch (req.body.type) {
     case 0:
-      type = 'Lot'
+      type = "Lot";
       break;
     case 1:
-      type = 'SFR'
+      type = "SFR";
       break;
     case 2:
-      type = 'MFR'
+      type = "MFR";
       break;
     case 3:
-      type = "COM"
+      type = "COM";
       break;
     case "":
       res.send({
         response: -1,
         message: "Form Incomplete"
-      })
+      });
       return;
     default:
-      type = req.body.type
+      type = req.body.type;
       break;
   }
   // end legacy support
   let date = new Date(req.body.date);
-  let nd = date.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' })
+  let nd = date.toLocaleString("en-US", { timeZone: "America/Los_Angeles" });
   let path = Path.join("s3-us-west-1.amazonaws.com/varodrive/" + req.body.path);
   path = Path.normalize(path);
   path = slash(path);
   path = "https://" + path;
   let hyperPath = `=HYPERLINK("${path}","View Image")`;
-  User.findOne({ "_id": req.body.id })
-    .then((user) => {
-      DB.find({
-        street: req.body.street,
-      }, (err, docs) => {
+  User.findOne({ _id: req.body.id }).then(user => {
+    DB.find(
+      {
+        street: req.body.street
+      },
+      (err, docs) => {
         DB.create({
           address: req.body.address,
           street: req.body.street,
@@ -170,51 +222,60 @@ router.post('/NewDB', async (req, res) => {
           latitude: req.body.lat,
           longitude: req.body.lon,
           lastFound: Date.now()
-        }).then(()=>{
-          AppendDB([
-            "", //initials
-            hyperPath, //pic
-            nd,
-            req.body.street, //street
-            req.body.city, //city
-            req.body.state,
-            req.body.post, //zip
-            req.body.county,
-            type,
-            (user["fName"][0].toUpperCase() + user["lName"][0].toUpperCase())//driver name
-          ], user.state.toLowerCase())
-          res.send({
-            response: 0,
-            message: "Submission Complete!",
-            already: docs.length > 0 ? true : false
-          });
-        }).catch((err)=>{
-          console.log("err creating", err);
-          res.send({
-            response: -1,
-            message: "Form Incomplete"
-          })
-          return;
         })
+          .then(() => {
+            AppendDB(
+              [
+                "", //initials
+                hyperPath, //pic
+                nd,
+                req.body.street, //street
+                req.body.city, //city
+                req.body.state,
+                req.body.post, //zip
+                req.body.county,
+                type,
+                user["fName"][0].toUpperCase() + user["lName"][0].toUpperCase() //driver name
+              ],
+              user.state.toLowerCase()
+            );
+            res.send({
+              response: 0,
+              message: "Submission Complete!",
+              already: docs.length > 0 ? true : false
+            });
+          })
+          .catch(err => {
+            console.log("err creating", err);
+            res.send({
+              response: -1,
+              message: "Form Incomplete"
+            });
+            return;
+          });
+      }
+    );
+  });
+});
 
-      })
-    })
-})
-
-router.put('/updateDB', (req, res, next) => {
-  DB.findOneAndUpdate({
-    _id: req.body.id
-  }, {
-    [req.body.field]: req.body.update
-  }, (err, doc) => {
-    if(err){
-      console.log(err)
-      res.send({ok: false})
-    } else{
-      console.log(doc);
-      res.send({ok: true})
+router.put("/updateDB", (req, res, next) => {
+  DB.findOneAndUpdate(
+    {
+      _id: req.body.id
+    },
+    {
+      [req.body.field]: req.body.update
+    },
+    (err, doc) => {
+      if (err) {
+        console.log(err);
+        res.send({ ok: false });
+      } else {
+        console.log(doc);
+        res.send({ ok: true });
+      }
     }
-  })
-})
+  );
+});
 
 module.exports = router;

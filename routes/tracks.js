@@ -17,7 +17,8 @@ router.post('/init', async (req, res) => {
             await User.findByIdAndUpdate(userId, {tracker: new_track._id})
             res.send({tracker: new_track._id})
         } else res.send({tracker: track._id})
-    } catch(err) {
+      }
+    catch(err) {
         console.log("err making", err)
         res.send({tracker: ""})
     }
@@ -56,7 +57,7 @@ router.post('/', async (req, res) => {
                 }
             })
         } catch(err) {
-            res.send("error updating track")
+            es.send("error updating track")
         }
     } else {
         res.send('no track found')
