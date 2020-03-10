@@ -18,7 +18,6 @@ function getLocation (lat, lon, result, callback){
       console.error(err);
       return { err: "err" };
     }
-    console.log("res", res);
     let loc = {
       street: res[0].streetNumber + " " + res[0].streetName,
       address: res[0].formattedAddress,

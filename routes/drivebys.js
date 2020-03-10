@@ -4,6 +4,7 @@ const multer = require("multer");
 const Path = require("path");
 const slash = require("slash");
 const Async = require("async");
+const formidable = require("formidable");
 
 const fs = require("fs");
 const mkdirp = require("mkdirp");
@@ -25,7 +26,6 @@ const storage = multer.diskStorage({
       (date.getMonth() + 1).toString(),
       date.getDate().toString()
     );
-    //console.log("path of new Image: ", path);
     mkdirp(path, function(err) {
       cb(null, path);
     });
@@ -48,7 +48,7 @@ router.get("/byUserId/:userId/:limit/:sort", async (req, res) => {
       docs: docs
     });
   } catch (err) {
-    console.log('err', err)
+    console.log("err", err);
     res.send({
       response: -1,
       docs: []
@@ -155,18 +155,49 @@ router.post("/upload", upload.single("image"), async (req, res) => {
   }
 });
 
-router.post('/upload-db', (req, res) => {
-  console.log('req', req.body)
-  console.log('files', req.file, "files", req.files)
-  const date = new Date();
-  var path = Path.join(
-    "file/uploads/",
-    date.getFullYear().toString(),
-    (date.getMonth() + 1).toString(),
-    date.getDate().toString()
-  );
-  res.send({ok: true})
-})
+router.post("/upload-db", upload.single('image'), async (req, res) => {
+  //console.log(req.file); //this will be automatically set by multer
+  console.log(req.body);
+  try{
+    if(!req.body.id){
+      res.send({ok: false})
+    }
+    await uploadFile("varodrive", slash(req.file.path));
+    fs.unlink(req.file.path, err => {
+      console.log('err unlink', err)
+    })
+    const already = await DB.find({ street: req.body.street })
+
+    if(already.length > 0){
+      res.send({
+        already: true,
+      })
+    } else {
+      let path = Path.join("s3-us-west-1.amazonaws.com/varodrive/" + req.file.path);
+      path = Path.normalize(path);
+      path = slash(path);
+      path = "https://" + path;
+
+      await DB.create({
+        address: req.body.address,
+        street: req.body.street,
+        state: req.body.state.toLowerCase(),
+        picturePath: path, // req.body.path,
+        date: req.body.date,
+        type: req.body.type,
+        vacant: req.body.vacant,
+        burned: req.body.burned,
+        boarded: req.body.boarded,
+        finder: req.body.id,
+        latitude: req.body.latitude,
+        longitude: req.body.longitude,
+      })
+    }
+  } catch(err){
+    console.log('uploading', err)
+  }
+  res.send({ ok: true });
+});
 
 router.post("/NewDB", async (req, res) => {
   //support for legacy
