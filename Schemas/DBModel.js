@@ -1,5 +1,5 @@
-var mongoose = require('mongoose');
-const io = require('../socket').io;
+var mongoose = require("mongoose");
+const io = require("../socket").io;
 
 //Define a schema
 var Schema = mongoose.Schema;
@@ -62,23 +62,28 @@ var DriveBy = new Schema({
   timeZone: {
     type: String,
     required: false
+  },
+  status: {
+    type: Strng,
+    required: true,
+    default: 'Pending'
   }
 });
 
-var DriveByModel = mongoose.model('DriveBy', DriveBy);
+var DriveByModel = mongoose.model("DriveBy", DriveBy);
 
-DriveByModel.watch().on("change", (update) => {
-  if(update.operationType === 'update'){
+DriveByModel.watch().on("change", update => {
+  if (update.operationType === "update") {
     io.sockets.emit("update-db", update.documentKey._id);
-  } else if( update.operationType === 'insert') {
+  } else if (update.operationType === "insert") {
     io.sockets.emit("new-db", update.documentKey._id);
-  } else if(update.operationType === 'delete') {
+  } else if (update.operationType === "delete") {
     io.sockets.emit("delete-db", update.documentKey._id);
-  } else if(update.operationType === 'replace') {
+  } else if (update.operationType === "replace") {
     io.sockets.emit("update-db", update.documentKey._id);
   } else {
-    console.log("uncaught update", update)
+    console.log("uncaught update", update);
   }
-})
+});
 
 module.exports = DriveByModel;
