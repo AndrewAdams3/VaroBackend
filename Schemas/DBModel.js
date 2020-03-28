@@ -64,7 +64,7 @@ var DriveBy = new Schema({
     required: false
   },
   status: {
-    type: Strng,
+    type: String,
     required: true,
     default: 'Pending'
   }
